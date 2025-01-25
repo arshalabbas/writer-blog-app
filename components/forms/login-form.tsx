@@ -13,15 +13,48 @@ import {
   FormMessage,
 } from "../ui/form";
 import Link from "next/link";
+import { loginSchema, LoginSchema } from "@/lib/schemas/auth.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginuser } from "@/lib/actions/auth.actions";
+import { useToast } from "@/hooks/use-toast";
+import { redirect } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
-  const form = useForm();
+  const form = useForm<LoginSchema>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: zodResolver(loginSchema),
+  });
+
+  const { toast } = useToast();
+
+  const onSubmit = async (data: LoginSchema) => {
+    const loginResponse = await loginuser(data);
+
+    if (loginResponse?.error) {
+      toast({
+        title: "Login Failed",
+        description: loginResponse.error,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    redirect("/");
+  };
+
   return (
     <Form {...form}>
-      <form className={cn("flex flex-col gap-6", className)} {...props}>
+      <form
+        className={cn("flex flex-col gap-6", className)}
+        {...props}
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold">Login to your account</h1>
           <p className="text-balance text-sm text-muted-foreground">
@@ -36,7 +69,7 @@ export function LoginForm({
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="m@example.com" {...field} />
+                <Input placeholder="m@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -13,15 +13,48 @@ import {
   FormMessage,
 } from "../ui/form";
 import Link from "next/link";
+import { signUpSchema, SignUpSchema } from "@/lib/schemas/auth.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { singUpUser } from "@/lib/actions/auth.actions";
+import { redirect } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
-  const form = useForm();
+  const form = useForm<SignUpSchema>({
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+    },
+    resolver: zodResolver(signUpSchema),
+  });
+
+  const { toast } = useToast();
+
+  const onSubmit = async (data: SignUpSchema) => {
+    const signUpResponse = await singUpUser(data);
+    if (signUpResponse?.error) {
+      toast({
+        title: "Sign Up Failed",
+        description: signUpResponse.error,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    redirect("/");
+  };
+
   return (
     <Form {...form}>
-      <form className={cn("flex flex-col gap-3", className)} {...props}>
+      <form
+        className={cn("flex flex-col gap-3", className)}
+        {...props}
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold">Create an account</h1>
           <p className="text-balance text-sm text-muted-foreground">
@@ -75,9 +108,9 @@ export function SignUpForm({
         </Button>
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border"></div>
         <div className="text-center text-sm">
-          Don&apos;t have an account?{" "}
+          Already have an account{" "}
           <Link href="/login" className="underline underline-offset-4">
-            Sign up
+            Login
           </Link>
         </div>
       </form>
