@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Writers - Write. Share. Inspire.",
-    template: "%s | Writers - Write. Share. Inspire.",
+    default: "Writer - Write. Share. Inspire.",
+    template: "%s | Writer - Write. Share. Inspire.",
   },
   description:
     "Discover the ultimate platform for writers and bloggers. Share your stories, connect with readers, and unleash your creativity with our user-friendly blogging app. Join now and start your writing journey!",
