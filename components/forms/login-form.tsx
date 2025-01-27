@@ -2,7 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { loginSchema, LoginSchema } from "@/lib/schemas/auth.schema";
 import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -12,12 +18,6 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import Link from "next/link";
-import { loginSchema, LoginSchema } from "@/lib/schemas/auth.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginuser } from "@/lib/actions/auth.actions";
-import { useToast } from "@/hooks/use-toast";
-import { redirect } from "next/navigation";
 
 export function LoginForm({
   className,
@@ -31,21 +31,44 @@ export function LoginForm({
     resolver: zodResolver(loginSchema),
   });
 
+  const router = useRouter();
+
   const { toast } = useToast();
 
   const onSubmit = async (data: LoginSchema) => {
-    const loginResponse = await loginuser(data);
+    // const loginResponse = await loginuser(data);
+    // if (loginResponse?.error) {
+    //   toast({
+    //     title: "Login Failed",
+    //     description: loginResponse.error,
+    //     variant: "destructive",
+    //   });
+    //   return;
+    // }
 
-    if (loginResponse?.error) {
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        ...data,
+      });
+
+      if (result?.error) {
+        console.log("RESULT", result);
+        toast({
+          title: "Login Failed RESULT",
+          description: result.error,
+          variant: "destructive",
+        });
+        return;
+      }
+      router.replace("/");
+    } catch {
       toast({
         title: "Login Failed",
-        description: loginResponse.error,
+        description: "Failed to login, please try again later.",
         variant: "destructive",
       });
-      return;
     }
-
-    redirect("/");
   };
 
   return (

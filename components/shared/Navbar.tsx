@@ -4,8 +4,11 @@ import { Input } from "../ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Bell, Plus, Search } from "lucide-react";
+import { auth } from "@/lib/auth";
+import Link from "next/link";
 
-const Navbar = () => {
+const Navbar = async () => {
+  const session = await auth();
   return (
     <nav className="fixed left-0 top-0 flex h-[56px] w-full items-center justify-between border-b-[.5px] border-slate-400/30 bg-white px-10 sm:h-[65px]">
       {/* Left Nav */}
@@ -29,19 +32,28 @@ const Navbar = () => {
       </div>
 
       {/* Right Nav */}
+
       <div className="hidden items-center gap-5 sm:flex">
-        <div className="flex items-center gap-2">
-          <Button>
-            <Plus /> Write
-          </Button>
-          <Button size={"icon"} variant={"outline"}>
-            <Bell />
-          </Button>
-        </div>
-        <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        {session ? (
+          <>
+            <div className="flex items-center gap-2">
+              <Button>
+                <Plus /> Write
+              </Button>
+              <Button size={"icon"} variant={"outline"}>
+                <Bell />
+              </Button>
+            </div>
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </>
+        ) : (
+          <Link href={"/login"}>
+            <Button>Login</Button>
+          </Link>
+        )}
       </div>
     </nav>
   );

@@ -37,12 +37,14 @@ export const singUpUser = async (singupData: SignUpSchema) => {
   await prisma.user.create({
     data: {
       username,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
     },
   });
 };
 
+// TODO: GET RID OF THIS
+// FIX: GET RID OF THIS
 export const loginuser = async (loginData: LoginSchema) => {
   const validate = loginSchema.safeParse(loginData);
 
