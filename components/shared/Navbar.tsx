@@ -10,16 +10,18 @@ import Link from "next/link";
 const Navbar = async () => {
   const session = await auth();
   return (
-    <nav className="fixed left-0 top-0 flex h-[56px] w-full items-center justify-between border-b-[.5px] border-slate-400/30 bg-white px-10 sm:h-[65px]">
+    <nav className="fixed left-0 top-0 flex h-[56px] w-full items-center justify-between border-b-[.5px] border-slate-400/30 bg-background px-10 sm:h-[65px]">
       {/* Left Nav */}
       <div className="flex items-center gap-5 md:gap-10">
-        <Image
-          src={"/Logo.svg"}
-          alt="Logo"
-          width={105}
-          height={40}
-          className="aspect-auto w-[60px] object-contain sm:w-[80px] md:h-[40px] md:w-[105px]"
-        />
+        <Link href={"/"}>
+          <Image
+            src={"/Logo.svg"}
+            alt="Logo"
+            width={105}
+            height={40}
+            className="aspect-auto w-[60px] object-contain sm:w-[80px] md:h-[40px] md:w-[105px]"
+          />
+        </Link>
         <div className="hidden sm:flex">
           <Input
             className="hidden w-[350px] md:block"

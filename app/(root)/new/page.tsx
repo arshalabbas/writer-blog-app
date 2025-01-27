@@ -1,7 +1,12 @@
+import WritesForm from "@/components/forms/writes-form";
 import React from "react";
 
-const NewWrite = () => {
-  return <div>NewWrite</div>;
+const NewWrites = () => {
+  return (
+    <div>
+      <WritesForm />
+    </div>
+  );
 };
 
-export default NewWrite;
+export default NewWrites;
