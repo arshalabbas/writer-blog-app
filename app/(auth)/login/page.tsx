@@ -1,5 +1,10 @@
 import { LoginForm } from "@/components/forms/login-form";
+import { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Login",
+};
 
 export default function LoginPage() {
   return (
