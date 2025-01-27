@@ -10,7 +10,7 @@ const Home = async () => {
   const session = await auth();
 
   return (
-    <div className="pt-[100px]">
+    <div>
       {session?.user?.email} <LogoutButton />
     </div>
   );

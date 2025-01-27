@@ -64,3 +64,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .view-area {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  @media (min-width: 768px) {
+    .view-area {
+      width: 750px;
+    }
+  }
+  @media (min-width: 992px) {
+    .view-area {
+      width: 970px;
+    }
+  }
+  @media (min-width: 1200px) {
+    .view-area {
+      width: 1170px;
+    }
+  }
+}

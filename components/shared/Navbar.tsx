@@ -37,9 +37,11 @@ const Navbar = async () => {
         {session ? (
           <>
             <div className="flex items-center gap-2">
-              <Button>
-                <Plus /> Write
-              </Button>
+              <Link href={"/new"}>
+                <Button>
+                  <Plus /> Write
+                </Button>
+              </Link>
               <Button size={"icon"} variant={"outline"}>
                 <Bell />
               </Button>
