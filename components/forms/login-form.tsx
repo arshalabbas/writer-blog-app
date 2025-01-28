@@ -36,16 +36,6 @@ export function LoginForm({
   const { toast } = useToast();
 
   const onSubmit = async (data: LoginSchema) => {
-    // const loginResponse = await loginuser(data);
-    // if (loginResponse?.error) {
-    //   toast({
-    //     title: "Login Failed",
-    //     description: loginResponse.error,
-    //     variant: "destructive",
-    //   });
-    //   return;
-    // }
-
     try {
       const result = await signIn("credentials", {
         redirect: false,

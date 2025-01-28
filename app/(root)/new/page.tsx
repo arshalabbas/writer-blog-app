@@ -1,10 +1,10 @@
-import WritesForm from "@/components/forms/writes-form";
+import BlogForm from "@/components/forms/blog-form";
 import React from "react";
 
 const NewWrites = () => {
   return (
     <div>
-      <WritesForm />
+      <BlogForm />
     </div>
   );
 };

@@ -15,7 +15,7 @@ const sectionSchema = z.object({
     .nonnegative("Section order must be a positive integer"),
 });
 
-export const writesSchema = z.object({
+export const blogSchema = z.object({
   title: z
     .string()
     .min(1, "Title is required")
@@ -28,4 +28,4 @@ export const writesSchema = z.object({
   sections: z.array(sectionSchema).min(1, "At least one section is required."),
 });
 
-export type WritesSchema = z.infer<typeof writesSchema>;
+export type BlogSchema = z.infer<typeof blogSchema>;

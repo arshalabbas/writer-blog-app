@@ -1,6 +1,6 @@
 "use client";
 
-import { writesSchema, WritesSchema } from "@/lib/schemas/writes.schema";
+import { blogSchema, BlogSchema } from "@/lib/schemas/blog.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -23,16 +23,19 @@ import {
 } from "../ui/card";
 import { Button } from "../ui/button";
 import { Plus, Trash } from "lucide-react";
+import { createBlog } from "@/lib/actions/blog.actions";
+import { useSession } from "next-auth/react";
 
-const WritesForm = () => {
-  const form = useForm<WritesSchema>({
+const BlogForm = () => {
+  const session = useSession();
+  const form = useForm<BlogSchema>({
     defaultValues: {
       title: "",
       description: "",
       image: "",
       sections: [{ title: "", content: "", order: 0 }],
     },
-    resolver: zodResolver(writesSchema),
+    resolver: zodResolver(blogSchema),
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -40,9 +43,11 @@ const WritesForm = () => {
     name: "sections",
   });
 
-  const onSubmit = (data: WritesSchema) => {
-    console.log(data);
+  const onSubmit = async (data: BlogSchema) => {
+    if (session.data && session.data.user && session.data.user.id)
+      createBlog(session.data?.user?.id, data);
   };
+  console.log(session.data);
 
   return (
     <Form {...form}>
@@ -50,7 +55,7 @@ const WritesForm = () => {
         className="flex flex-col gap-5 pb-20"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <h1 className="text-2xl font-bold">Create new post</h1>
+        <h1 className="text-2xl font-bold">Create new writing</h1>
         {/* Title */}
         <FormField
           name="title"
@@ -89,11 +94,7 @@ const WritesForm = () => {
             <FormItem>
               <FormLabel>Image</FormLabel>
               <FormControl>
-                <Input
-                  type="file"
-                  placeholder="What's on your mind?"
-                  {...field}
-                />
+                <Input type="file" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -179,4 +180,4 @@ const WritesForm = () => {
   );
 };
 
-export default WritesForm;
+export default BlogForm;
