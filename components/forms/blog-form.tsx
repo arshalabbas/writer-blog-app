@@ -1,9 +1,18 @@
 "use client";
 
+import { createBlog } from "@/lib/actions/blog.actions";
 import { blogSchema, BlogSchema } from "@/lib/schemas/blog.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import { Plus, Trash } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import {
   Form,
   FormControl,
@@ -14,20 +23,12 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
-import { Button } from "../ui/button";
-import { Plus, Trash } from "lucide-react";
-import { createBlog } from "@/lib/actions/blog.actions";
-import { useSession } from "next-auth/react";
 
-const BlogForm = () => {
-  const session = useSession();
+interface Props {
+  userId: string;
+}
+
+const BlogForm = ({ userId }: Props) => {
   const form = useForm<BlogSchema>({
     defaultValues: {
       title: "",
@@ -44,10 +45,8 @@ const BlogForm = () => {
   });
 
   const onSubmit = async (data: BlogSchema) => {
-    if (session.data && session.data.user && session.data.user.id)
-      createBlog(session.data?.user?.id, data);
+    createBlog(userId, data);
   };
-  console.log(session.data);
 
   return (
     <Form {...form}>

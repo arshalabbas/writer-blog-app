@@ -13,13 +13,13 @@ export const createBlog = async (userId: string, data: unknown) => {
 
   const { title, description, image, sections } = validate.data;
 
-  await prisma.writing.create({
+  await prisma.blog.create({
     data: {
       title,
       description,
       image,
       sections: { create: sections },
-      writerId: userId,
+      authorId: userId,
     },
   });
 
