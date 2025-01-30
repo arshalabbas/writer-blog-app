@@ -11,7 +11,7 @@ const Home = async () => {
 
   return (
     <div>
-      {session?.user?.email} <LogoutButton />
+      {session?.user?.email} {session?.user?.id} <LogoutButton />
     </div>
   );
 };

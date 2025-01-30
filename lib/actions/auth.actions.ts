@@ -8,16 +8,18 @@ import {
   signUpSchema,
 } from "@/lib/schemas/auth.schema";
 import prisma from "@/lib/prisma";
+import { signIn } from "../auth";
+import { AuthError } from "next-auth";
 
 // Create a new account if it doesn't exist
 export const singUpUser = async (singupData: SignUpSchema) => {
-  const validate = signUpSchema.safeParse(singupData);
+  const validatedData = signUpSchema.parse(singupData);
 
-  if (!validate.success) {
+  if (!validatedData) {
     return { error: "Invalid data provided." };
   }
 
-  const { username, email, password } = validate.data;
+  const { username, email, password } = validatedData;
 
   const existingUsername = await prisma.user.findUnique({
     where: { username },
@@ -32,27 +34,33 @@ export const singUpUser = async (singupData: SignUpSchema) => {
     return { error: "Email already exists." };
   }
 
-  const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt());
+  try {
+    const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt());
 
-  await prisma.user.create({
-    data: {
-      username,
-      email: email.toLowerCase(),
-      password: hashedPassword,
-    },
-  });
+    await prisma.user.create({
+      data: {
+        username,
+        email: email.toLowerCase(),
+        password: hashedPassword,
+      },
+    });
+
+    return { success: "User created successfully." };
+  } catch (error) {
+    console.log(error);
+    return { error: "An error occurred while creating user." };
+  }
 };
 
-// TODO: GET RID OF THIS
-// FIX: GET RID OF THIS
-export const loginuser = async (loginData: LoginSchema) => {
-  const validate = loginSchema.safeParse(loginData);
+// Sign In the user
+export const loginUser = async (loginData: LoginSchema) => {
+  const validatedData = loginSchema.parse(loginData);
 
-  if (!validate.success) {
+  if (!validatedData) {
     return { error: "Invalid data provided." };
   }
 
-  const { email, password } = validate.data;
+  const { email, password } = validatedData;
 
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) return { error: `User with email ${email} does not exist.` };
@@ -60,4 +68,25 @@ export const loginuser = async (loginData: LoginSchema) => {
   const passwordMatched = await bcrypt.compare(password, user.password);
 
   if (!passwordMatched) return { error: "Password is incorrect." };
+
+  try {
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: "/",
+    });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid credentials." };
+        default:
+          return { error: "Please confirm your email address." };
+      }
+    }
+
+    throw error;
+  }
+
+  return { success: "User logged in successfully." };
 };

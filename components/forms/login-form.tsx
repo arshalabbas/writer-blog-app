@@ -3,12 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { loginUser } from "@/lib/actions/auth.actions";
 import { loginSchema, LoginSchema } from "@/lib/schemas/auth.schema";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -31,34 +30,18 @@ export function LoginForm({
     resolver: zodResolver(loginSchema),
   });
 
-  const router = useRouter();
-
   const { toast } = useToast();
 
   const onSubmit = async (data: LoginSchema) => {
-    try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        ...data,
-      });
-
-      if (result?.error) {
-        console.log("RESULT", result);
+    loginUser(data).then((res) => {
+      if (res.error) {
         toast({
-          title: "Login Failed RESULT",
-          description: result.error,
+          title: "Login Failed",
+          description: res.error,
           variant: "destructive",
         });
-        return;
       }
-      router.replace("/");
-    } catch {
-      toast({
-        title: "Login Failed",
-        description: "Failed to login, please try again later.",
-        variant: "destructive",
-      });
-    }
+    });
   };
 
   return (

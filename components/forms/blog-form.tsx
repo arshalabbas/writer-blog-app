@@ -54,7 +54,7 @@ const BlogForm = ({ userId }: Props) => {
         className="flex flex-col gap-5 pb-20"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <h1 className="text-2xl font-bold">Create new writing</h1>
+        <h1 className="text-2xl font-bold">Create new blog</h1>
         {/* Title */}
         <FormField
           name="title"

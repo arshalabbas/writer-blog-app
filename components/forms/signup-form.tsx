@@ -2,7 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { singUpUser } from "@/lib/actions/auth.actions";
+import { signUpSchema, SignUpSchema } from "@/lib/schemas/auth.schema";
 import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -12,12 +18,6 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import Link from "next/link";
-import { signUpSchema, SignUpSchema } from "@/lib/schemas/auth.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { singUpUser } from "@/lib/actions/auth.actions";
-import { redirect } from "next/navigation";
-import { useToast } from "@/hooks/use-toast";
 
 export function SignUpForm({
   className,
@@ -35,17 +35,19 @@ export function SignUpForm({
   const { toast } = useToast();
 
   const onSubmit = async (data: SignUpSchema) => {
-    const signUpResponse = await singUpUser(data);
-    if (signUpResponse?.error) {
-      toast({
-        title: "Sign Up Failed",
-        description: signUpResponse.error,
-        variant: "destructive",
-      });
-      return;
-    }
+    await singUpUser(data).then((res) => {
+      if (res.error) {
+        toast({
+          title: "Signup Failed",
+          description: res.error,
+          variant: "destructive",
+        });
+      }
 
-    redirect("/");
+      if (res.success) {
+        redirect("/");
+      }
+    });
   };
 
   return (
@@ -103,7 +105,7 @@ export function SignUpForm({
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full mt-3">
+        <Button type="submit" className="mt-3 w-full">
           Create account
         </Button>
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border"></div>
