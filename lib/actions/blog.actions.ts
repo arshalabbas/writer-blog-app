@@ -3,8 +3,11 @@
 import prisma from "@/lib/prisma";
 import { blogSchema } from "@/lib/schemas/blog.schema";
 import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 
-export const createBlog = async (userId: string, data: unknown) => {
+export const createBlog = async (data: unknown) => {
+  const session = await auth();
+  if (!session?.user) return { error: "You are not authenticated." };
   const validate = blogSchema.safeParse(data);
 
   if (!validate.success) {
@@ -19,9 +22,20 @@ export const createBlog = async (userId: string, data: unknown) => {
       description,
       image,
       sections: { create: sections },
-      authorId: userId,
+      authorId: session.user.id || "",
     },
   });
 
   redirect("/");
+  return {};
+};
+
+export const getAllBlogs = async () => {
+  const session = await auth();
+  // console.log(userId);
+  const blogs = await prisma.blog.findMany({
+    where: { author: { id: { not: session?.user?.id } } },
+    include: { author: { select: { username: true } } },
+  });
+  return blogs;
 };

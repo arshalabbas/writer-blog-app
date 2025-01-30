@@ -23,12 +23,14 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { useEdgeStore } from "@/lib/edgestore";
+import { useState } from "react";
+import { SingleImageDropzone } from "../image-dropzone";
+import { Progress } from "../ui/progress";
 
-interface Props {
-  userId: string;
-}
-
-const BlogForm = ({ userId }: Props) => {
+const BlogForm = () => {
+  const [file, setFile] = useState<File>();
+  const [progress, setProgress] = useState<number>(0);
   const form = useForm<BlogSchema>({
     defaultValues: {
       title: "",
@@ -44,8 +46,19 @@ const BlogForm = ({ userId }: Props) => {
     name: "sections",
   });
 
+  const { edgestore } = useEdgeStore();
+
   const onSubmit = async (data: BlogSchema) => {
-    createBlog(userId, data);
+    if (file) {
+      const res = await edgestore.publicFiles.upload({
+        file,
+        onProgressChange: setProgress,
+      });
+
+      createBlog({ ...data, image: res.url });
+    } else {
+      createBlog(data);
+    }
   };
 
   return (
@@ -89,11 +102,19 @@ const BlogForm = ({ userId }: Props) => {
         <FormField
           name="image"
           control={form.control}
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Image</FormLabel>
               <FormControl>
-                <Input type="file" {...field} />
+                <SingleImageDropzone
+                  className="w-full"
+                  width={500}
+                  height={200}
+                  value={file}
+                  onChange={(file) => {
+                    setFile(file);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -168,10 +189,17 @@ const BlogForm = ({ userId }: Props) => {
           </span>
         </div>
         <div className="fixed bottom-0 left-0 right-0 z-50 h-[62px] w-full border-t border-slate-400/30 bg-background">
-          <div className="view-area flex h-full w-full items-center justify-end">
-            <Button type="submit">
-              <Plus /> Publish
-            </Button>
+          <div className="view-area flex h-full w-full items-center justify-end gap-5">
+            {progress > 0 ? (
+              <div className="flex items-center gap-2">
+                <span className="font-semibold">Uploading</span>
+                <Progress value={progress} className="w-64" />
+              </div>
+            ) : (
+              <Button type="submit">
+                <Plus /> Publish
+              </Button>
+            )}
           </div>
         </div>
       </form>

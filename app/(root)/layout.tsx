@@ -5,6 +5,7 @@ import "../globals.css";
 import Navbar from "@/components/shared/Navbar";
 import Bottombar from "@/components/shared/Bottombar";
 import { SessionProvider } from "next-auth/react";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,7 +38,9 @@ export default function RootLayout({
       >
         <SessionProvider>
           <Navbar />
-          <main className="view-area pt-[80px]">{children}</main>
+          <main className="view-area pt-[80px]">
+            <EdgeStoreProvider>{children}</EdgeStoreProvider>
+          </main>
           <Bottombar />
           <Toaster />
         </SessionProvider>

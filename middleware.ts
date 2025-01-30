@@ -10,11 +10,7 @@ const protectedRoutes = ["/new"];
 export default middleware((req) => {
   const session = req.auth;
 
-  console.log("SESSION DATA", session);
-
   const { pathname } = req.nextUrl;
-
-  console.log("PATHNAME", pathname);
 
   if (session && authRoutes.some((route) => pathname.startsWith(route))) {
     return NextResponse.redirect(new URL("/", req.url));

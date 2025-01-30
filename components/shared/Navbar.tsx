@@ -49,8 +49,10 @@ const Navbar = async () => {
               </Button>
             </div>
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarImage src={session.user?.image || ""} />
+              <AvatarFallback>
+                {(session.user?.email || "")[0].toUpperCase()}
+              </AvatarFallback>
             </Avatar>
           </>
         ) : (
