@@ -1,7 +1,8 @@
 "use client";
 
 import { formatFileSize } from "@edgestore/react/utils";
-import { UploadCloudIcon, X } from "lucide-react";
+import { ImageIcon, X } from "lucide-react";
+import Image from "next/image";
 import * as React from "react";
 import { useDropzone, type DropzoneOptions } from "react-dropzone";
 import { twMerge } from "tailwind-merge";
@@ -18,8 +19,6 @@ const variants = {
 };
 
 type InputProps = {
-  width: number | string;
-  height: number | string;
   className?: string;
   value?: File | string;
   onChange?: (file?: File) => void | Promise<void>;
@@ -43,10 +42,7 @@ const ERROR_MESSAGES = {
 };
 
 const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    { dropzoneOptions, width, height, value, className, disabled, onChange },
-    ref,
-  ) => {
+  ({ dropzoneOptions, value, className, disabled, onChange }, ref) => {
     const imageUrl = React.useMemo(() => {
       if (typeof value === "string") {
         // in case an url is passed in, use it to display the image
@@ -125,10 +121,6 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
         <div
           {...getRootProps({
             className: dropZoneClassName,
-            style: {
-              width,
-              height,
-            },
           })}
         >
           {/* Main File Input */}
@@ -136,16 +128,18 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
 
           {imageUrl ? (
             // Image Preview
-            <img
+            <Image
               className="h-full w-full rounded-md object-cover"
+              width={500}
+              height={350}
               src={imageUrl}
               alt={acceptedFiles[0]?.name}
             />
           ) : (
             // Upload Icon
             <div className="flex flex-col items-center justify-center text-xs text-gray-400">
-              <UploadCloudIcon className="mb-2 h-7 w-7" />
-              <div className="text-gray-400">drag & drop to upload</div>
+              <ImageIcon className="mb-2 h-7 w-7" />
+              <div className="text-gray-400">Drag and Drop Image</div>
               <div className="mt-3">
                 <Button type="button" disabled={disabled}>
                   select

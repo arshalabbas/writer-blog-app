@@ -12,7 +12,7 @@ const HomeBlogs = async () => {
           title={blog.title}
           description={blog.description}
           createdAt={blog.createAt}
-          image={blog.image || ""}
+          image={blog.thumbnail || blog.image || ""}
           username="saf"
         />
       ))}

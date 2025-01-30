@@ -14,13 +14,14 @@ export const createBlog = async (data: unknown) => {
     return { error: "Invalid data provided!" };
   }
 
-  const { title, description, image, sections } = validate.data;
+  const { title, description, image, sections, thumbnail } = validate.data;
 
   await prisma.blog.create({
     data: {
       title,
       description,
       image,
+      thumbnail,
       sections: { create: sections },
       authorId: session.user.id || "",
     },
@@ -37,5 +38,7 @@ export const getAllBlogs = async () => {
     where: { author: { id: { not: session?.user?.id } } },
     include: { author: { select: { username: true } } },
   });
+
+  console.log(blogs);
   return blogs;
 };

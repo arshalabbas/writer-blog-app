@@ -1,31 +1,22 @@
 "use client";
 
 import { createBlog } from "@/lib/actions/blog.actions";
+import { useEdgeStore } from "@/lib/edgestore";
 import { blogSchema, BlogSchema } from "@/lib/schemas/blog.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Trash } from "lucide-react";
+import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { SingleImageDropzone } from "../image-dropzone";
+import { BlogInput } from "../ui/blog-input";
 import { Button } from "../ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { useEdgeStore } from "@/lib/edgestore";
-import { useState } from "react";
-import { SingleImageDropzone } from "../image-dropzone";
 import { Progress } from "../ui/progress";
 
 const BlogForm = () => {
@@ -56,7 +47,7 @@ const BlogForm = () => {
         onProgressChange: setProgress,
       });
 
-      createBlog({ ...data, image: res.url });
+      createBlog({ ...data, image: res.url, thumbnail: res.thumbnailUrl });
     } else {
       createBlog(data);
     }
@@ -65,19 +56,43 @@ const BlogForm = () => {
   return (
     <Form {...form}>
       <form
-        className="flex flex-col gap-5 pb-20"
+        className="flex w-full max-w-[800px] flex-col gap-5 pb-20"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <h1 className="text-2xl font-bold">Create new blog</h1>
+        {/* Image */}
+        <FormField
+          name="image"
+          control={form.control}
+          render={() => (
+            <FormItem>
+              {/* <FormLabel>Image</FormLabel> */}
+              <FormControl>
+                <SingleImageDropzone
+                  className="w-full"
+                  value={file}
+                  onChange={(file) => {
+                    setFile(file);
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         {/* Title */}
         <FormField
           name="title"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              {/* <FormLabel>Title</FormLabel> */}
               <FormControl>
-                <Input placeholder="What's on your mind?" {...field} />
+                <BlogInput
+                  placeholder="Blog Title"
+                  textType={"title"}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -90,31 +105,13 @@ const BlogForm = () => {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              {/* <FormLabel>Description</FormLabel> */}
               <FormControl>
-                <Textarea placeholder="Express it here" rows={10} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Image */}
-        <FormField
-          name="image"
-          control={form.control}
-          render={() => (
-            <FormItem>
-              <FormLabel>Image</FormLabel>
-              <FormControl>
-                <SingleImageDropzone
-                  className="w-full"
-                  width={"100%"}
-                  height={100}
-                  value={file}
-                  onChange={(file) => {
-                    setFile(file);
-                  }}
+                <BlogInput
+                  placeholder="Blog Description"
+                  textType={"description"}
+                  initialHeight={100}
+                  {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -122,7 +119,65 @@ const BlogForm = () => {
           )}
         />
 
-        <h1 className="text-lg font-semibold">Sections</h1>
+        {fields.map((field, index) => (
+          <div
+            key={field.id}
+            className="group relative flex flex-col gap-2 border-primary"
+          >
+            <FormField
+              name={`sections.${index}.title` as const}
+              control={form.control}
+              render={({ field: sectionField }) => (
+                <FormItem>
+                  {/* <FormLabel>Title</FormLabel> */}
+                  <FormControl>
+                    <BlogInput
+                      placeholder="Sub Title"
+                      textType={"subtle"}
+                      {...sectionField}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name={`sections.${index}.content` as const}
+              control={form.control}
+              render={({ field: sectionField }) => (
+                <FormItem>
+                  {/* <FormLabel>Content</FormLabel> */}
+                  <FormControl>
+                    <BlogInput
+                      className="mt-1"
+                      placeholder="Content..."
+                      textType={"description"}
+                      initialHeight={100}
+                      {...sectionField}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Remove Button */}
+            {fields.length > 1 && (
+              <div className="absolute right-0 top-0 hidden group-focus-within:flex">
+                <Button
+                  type="button"
+                  size={"icon"}
+                  variant={"destructive"}
+                  onClick={() => remove(index)}
+                >
+                  <Trash />
+                </Button>
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* <h1 className="text-lg font-semibold">Sections</h1>
         {fields.map((field, index) => (
           <Card key={field.id}>
             <CardHeader>
@@ -174,7 +229,8 @@ const BlogForm = () => {
               </Button>
             </CardFooter>
           </Card>
-        ))}
+        ))} */}
+
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">
             <Button

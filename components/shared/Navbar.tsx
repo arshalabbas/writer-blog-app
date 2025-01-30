@@ -10,7 +10,7 @@ import Link from "next/link";
 const Navbar = async () => {
   const session = await auth();
   return (
-    <nav className="fixed left-0 top-0 flex h-[56px] w-full items-center justify-between border-b-[.5px] border-slate-400/30 bg-background px-10 sm:h-[65px]">
+    <nav className="fixed left-0 top-0 z-10 flex h-[56px] w-full items-center justify-between border-b-[.5px] border-slate-400/30 bg-background px-10 sm:h-[65px]">
       {/* Left Nav */}
       <div className="flex items-center gap-5 md:gap-10">
         <Link href={"/"}>

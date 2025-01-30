@@ -25,6 +25,7 @@ export const blogSchema = z.object({
     .min(1, "Description is required")
     .max(2000, "Description can not be more than 2000 characters."),
   image: z.string().optional(),
+  thumbnail: z.string().optional(),
   sections: z.array(sectionSchema).min(1, "At least one section is required."),
 });
 

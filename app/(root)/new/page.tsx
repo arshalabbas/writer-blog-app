@@ -3,7 +3,7 @@ import React from "react";
 
 const NewWrites = async () => {
   return (
-    <div>
+    <div className="flex w-full justify-center">
       <BlogForm />
     </div>
   );

@@ -62,5 +62,5 @@ model BlogSection {
   content String
   order   Int
   blogId  String
-  blog    Blog   @relation(fields: [blogId], references: [id])
+  blog    Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
 }
