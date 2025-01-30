@@ -52,6 +52,7 @@ const BlogForm = () => {
     if (file) {
       const res = await edgestore.publicFiles.upload({
         file,
+        input: { type: "blog" },
         onProgressChange: setProgress,
       });
 
@@ -108,8 +109,8 @@ const BlogForm = () => {
               <FormControl>
                 <SingleImageDropzone
                   className="w-full"
-                  width={500}
-                  height={200}
+                  width={"100%"}
+                  height={100}
                   value={file}
                   onChange={(file) => {
                     setFile(file);
