@@ -132,7 +132,7 @@ const BlogForm = () => {
                   {/* <FormLabel>Title</FormLabel> */}
                   <FormControl>
                     <BlogInput
-                      placeholder="Sub Title"
+                      placeholder="Section Title"
                       textType={"subtle"}
                       {...sectionField}
                     />
@@ -150,7 +150,7 @@ const BlogForm = () => {
                   <FormControl>
                     <BlogInput
                       className="mt-1"
-                      placeholder="Content..."
+                      placeholder="Section content"
                       textType={"description"}
                       initialHeight={100}
                       {...sectionField}
@@ -176,61 +176,6 @@ const BlogForm = () => {
             )}
           </div>
         ))}
-
-        {/* <h1 className="text-lg font-semibold">Sections</h1>
-        {fields.map((field, index) => (
-          <Card key={field.id}>
-            <CardHeader>
-              <CardTitle>Section {index + 1}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <FormField
-                name={`sections.${index}.title` as const}
-                control={form.control}
-                render={({ field: sectionField }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input
-                        // placeholder={}
-                        {...sectionField}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name={`sections.${index}.content` as const}
-                control={form.control}
-                render={({ field: sectionField }) => (
-                  <FormItem>
-                    <FormLabel>Content</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        rows={8}
-                        // placeholder="What's on your mind?"
-                        {...sectionField}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-            <CardFooter>
-              <Button
-                type="button"
-                variant={"destructive"}
-                onClick={() => remove(index)}
-              >
-                <Trash />
-                Remove Section
-              </Button>
-            </CardFooter>
-          </Card>
-        ))} */}
-
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">
             <Button

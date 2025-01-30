@@ -32,13 +32,12 @@ export const createBlog = async (data: unknown) => {
 };
 
 export const getAllBlogs = async () => {
-  const session = await auth();
+  // const session = await auth();
   // console.log(userId);
   const blogs = await prisma.blog.findMany({
-    where: { author: { id: { not: session?.user?.id } } },
-    include: { author: { select: { username: true } } },
+    // where: { author: { id: { not: session?.user?.id } } },
+    include: { author: { select: { username: true, image: true } } },
   });
 
-  console.log(blogs);
   return blogs;
 };

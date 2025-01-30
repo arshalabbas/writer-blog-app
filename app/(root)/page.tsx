@@ -1,6 +1,6 @@
 import LogoutButton from "@/components/logout-button";
 import HomeBlogs from "@/components/sections/home-blogs";
-import { auth } from "@/lib/auth";
+import { Separator } from "@/components/ui/separator";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -9,16 +9,18 @@ export const metadata: Metadata = {
 };
 
 const Home = async () => {
-  const session = await auth();
-
   return (
     <div>
-      {session?.user?.email} {session?.user?.id} <LogoutButton />
-      <div>
+      <div className="flex gap-4">
         <Suspense fallback={<div>Loading...</div>}>
           <HomeBlogs />
         </Suspense>
+        <Separator orientation="vertical" className="hidden lg:block" />
+        <div className="hidden h-full w-80 bg-red-300 lg:flex">
+          (TODO) Sidebar
+        </div>
       </div>
+      <LogoutButton />
     </div>
   );
 };

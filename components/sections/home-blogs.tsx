@@ -5,17 +5,18 @@ const HomeBlogs = async () => {
   const blogs = await getAllBlogs();
 
   return (
-    <div>
+    <div className="flex flex-1 flex-col gap-5">
       {blogs.map((blog) => (
         <BlogCard
           key={blog.id}
           title={blog.title}
           description={blog.description}
           createdAt={blog.createAt}
-          image={blog.thumbnail || blog.image || ""}
-          username="saf"
+          image={blog.image || ""}
+          author={blog.author}
         />
       ))}
+      <div className="my-10" />
     </div>
   );
 };

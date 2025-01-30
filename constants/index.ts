@@ -18,7 +18,7 @@ export const bottomNavLinks: BottomLink[] = [
     Icon: Search,
   },
   {
-    href: "/write",
+    href: "/new",
     label: "Write",
     Icon: Plus,
   },

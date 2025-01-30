@@ -8,7 +8,7 @@ const sectionSchema = z.object({
   content: z
     .string()
     .min(1, "Section content is required")
-    .max(2000, "Section content can not be more than 2000 characters."),
+    .max(15000, "Section content can not be more than 2000 characters."),
   order: z
     .number()
     .int()
@@ -23,7 +23,7 @@ export const blogSchema = z.object({
   description: z
     .string()
     .min(1, "Description is required")
-    .max(2000, "Description can not be more than 2000 characters."),
+    .max(15000, "Description can not be more than 2000 characters."),
   image: z.string().optional(),
   thumbnail: z.string().optional(),
   sections: z.array(sectionSchema).min(1, "At least one section is required."),

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Bottombar = () => {
   return (
-    <div className="fixed bottom-0 left-0 flex h-[62px] w-full items-center justify-between border-t-[.5px] border-slate-400/30 px-5 sm:hidden">
+    <div className="fixed bottom-0 left-0 z-10 flex h-[62px] w-full items-center justify-between border-t-[.5px] border-slate-400/30 bg-background px-5 sm:hidden">
       {bottomNavLinks.map((link) => {
         const activeLink = "/";
         return (
