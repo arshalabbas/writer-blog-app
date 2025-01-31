@@ -1,15 +1,15 @@
 "use server";
 import bcrypt from "bcryptjs";
 
+import prisma from "@/lib/prisma";
 import {
   loginSchema,
   LoginSchema,
   SignUpSchema,
   signUpSchema,
 } from "@/lib/schemas/auth.schema";
-import prisma from "@/lib/prisma";
-import { signIn } from "../auth";
 import { AuthError } from "next-auth";
+import { signIn } from "../auth";
 
 // Create a new account if it doesn't exist
 export const singUpUser = async (singupData: SignUpSchema) => {
@@ -39,7 +39,7 @@ export const singUpUser = async (singupData: SignUpSchema) => {
 
     await prisma.user.create({
       data: {
-        username,
+        username: username.toLowerCase(),
         email: email.toLowerCase(),
         password: hashedPassword,
       },

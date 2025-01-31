@@ -45,7 +45,12 @@ export function SignUpForm({
       }
 
       if (res.success) {
-        redirect("/");
+        toast({
+          title: "Signup Successful",
+          description: "Now login to access the app.",
+          className: "bg-green-500 text-white border-transparent",
+        });
+        redirect("/login");
       }
     });
   };

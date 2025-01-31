@@ -71,7 +71,7 @@ const BlogCard = ({
       {/* Card Footer */}
       <div className="flex items-end justify-between py-4">
         <span className="text-sm text-muted-foreground">
-          {createdAt.toLocaleString()}
+          {new Date(createdAt).toLocaleString()}
         </span>
         {/* Actions */}
         <div className="flex items-center gap-4">

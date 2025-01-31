@@ -12,7 +12,7 @@ const HomeBlogs = async () => {
           key={blog.id}
           title={blog.title}
           description={blog.description}
-          createdAt={blog.createAt}
+          createdAt={blog.createdAt}
           image={blog.image || ""}
           author={blog.author}
         />

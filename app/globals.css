@@ -67,10 +67,6 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 @layer utilities {
   .view-area {
     padding-right: 15px;

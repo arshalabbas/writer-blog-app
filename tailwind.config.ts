@@ -51,6 +51,9 @@ export default {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        success: {
+          DEFAULT: "#198754",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

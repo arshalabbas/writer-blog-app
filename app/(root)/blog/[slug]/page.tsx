@@ -1,10 +1,13 @@
+import CommentCard from "@/components/cards/comment-card";
 import ProfileCard from "@/components/cards/profile-card";
+import CommentForm from "@/components/forms/comment-form";
 import { Button } from "@/components/ui/button";
 import IconButton from "@/components/ui/icon-button";
 import { Separator } from "@/components/ui/separator";
 import { getBlogBySlug } from "@/lib/actions/blog.actions";
+import { auth } from "@/lib/auth";
 import { generateSlug } from "@/lib/utils";
-import { Share } from "lucide-react";
+import { LogIn, PackageOpen, Share } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,20 +15,30 @@ import Link from "next/link";
 const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const slug = (await params).slug;
   const blog = await getBlogBySlug(slug);
+  const session = await auth();
 
   if (!blog) return null;
 
-  const { title, description, author, createAt, image, sections } = blog;
+  const {
+    id,
+    title,
+    description,
+    author,
+    createdAt,
+    image,
+    sections,
+    comments,
+  } = blog;
 
   return (
-    <div className="flex w-full justify-center">
+    <div className="flex w-full flex-col items-center">
       <div className="flex w-full max-w-[800px] flex-col gap-5">
         <h1 className="blog-title mb-5">{title}</h1>
         <ProfileCard
           username={author.username}
           image={author.image || ""}
           bio="Experienced React Developer"
-          footer={new Date(createAt).toLocaleString()}
+          footer={new Date(createdAt).toLocaleString()}
         />
 
         <Separator />
@@ -68,6 +81,41 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
               </Link>
               <p className="blog-description">{section.content}</p>
             </section>
+          ))}
+        </div>
+      </div>
+
+      {/* Comments */}
+      <div className="mt-10 w-full max-w-[800px]">
+        <div className="text-lg font-semibold">Comments</div>
+        {session ? (
+          <CommentForm blogId={id} slug={slug} />
+        ) : (
+          <div className="mb-10 flex w-full items-center justify-center gap-2 bg-primary-foreground p-10">
+            You need an account to comment.
+            <Button asChild>
+              <Link href={"/login"}>
+                <LogIn />
+                Login
+              </Link>
+            </Button>
+          </div>
+        )}
+        {comments.length <= 0 && (
+          <div className="flex w-full items-center justify-center gap-2 py-20 text-2xl text-muted-foreground">
+            <PackageOpen size={30} /> No comments
+          </div>
+        )}
+        <div className="flex flex-col gap-4 pb-10">
+          {comments.map((comment) => (
+            <CommentCard
+              id={comment.id}
+              userId={session?.user?.id || ""}
+              key={comment.id}
+              author={comment.author}
+              content={comment.content}
+              createdAt={comment.createdAt}
+            />
           ))}
         </div>
       </div>

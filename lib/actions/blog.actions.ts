@@ -5,10 +5,13 @@ import prisma from "@/lib/prisma";
 import { blogSchema } from "@/lib/schemas/blog.schema";
 import { redirect } from "next/navigation";
 import { generateSlug } from "../utils";
+import { revalidatePath } from "next/cache";
 
 export const createBlog = async (data: unknown) => {
   const session = await auth();
-  if (!session?.user) return { error: "You are not authenticated." };
+  if (!session?.user || !session.user.id)
+    return { error: "You are not authenticated." };
+
   const validate = blogSchema.safeParse(data);
 
   if (!validate.success) {
@@ -35,7 +38,7 @@ export const createBlog = async (data: unknown) => {
       image,
       thumbnail,
       sections: { create: sections },
-      authorId: session.user.id || "",
+      authorId: session.user.id,
     },
   });
 
@@ -49,6 +52,7 @@ export const getAllBlogs = async () => {
   const blogs = await prisma.blog.findMany({
     // where: { author: { id: { not: session?.user?.id } } },
     include: { author: { select: { username: true, image: true } } },
+    orderBy: { createdAt: "desc" },
   });
 
   return blogs;
@@ -59,9 +63,53 @@ export const getBlogBySlug = async (slug: string) => {
     where: { slug },
     include: {
       author: { select: { username: true, image: true } },
-      sections: true,
+      sections: { orderBy: { order: "asc" } },
+      comments: {
+        include: {
+          author: { select: { username: true, image: true, id: true } },
+        },
+        orderBy: { createdAt: "desc" },
+      },
     },
   });
 
   return blog;
+};
+
+export const postComment = async (
+  slug: string,
+  blogId: string,
+  content: string,
+) => {
+  const session = await auth();
+  if (!session?.user || !session.user.id)
+    return { error: "You are not authenticated." };
+
+  await prisma.comment.create({
+    data: {
+      content,
+      blogId,
+      authorId: session.user.id,
+    },
+  });
+
+  revalidatePath(`blog/${slug}`);
+};
+
+export const deleteComment = async (id: string) => {
+  const session = await auth();
+  if (!session?.user || !session.user.id)
+    return { error: "You are not authenticated." };
+
+  const comment = await prisma.comment.findUnique({
+    where: { id },
+    select: { authorId: true, blog: { select: { slug: true } } },
+  });
+
+  if (!comment || comment.authorId !== session.user.id)
+    return { error: "You can't delete this comment." };
+
+  await prisma.comment.delete({ where: { id } });
+
+  revalidatePath(`/blog/${comment.blog.slug}`);
 };
