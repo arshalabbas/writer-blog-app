@@ -4,7 +4,8 @@ const sectionSchema = z.object({
   title: z
     .string()
     .min(1, "Section title is required")
-    .max(300, "Sectiton title can not be more than 300 characters."),
+    .max(300, "Sectiton title can not be more than 300 characters.")
+    .trim(),
   content: z
     .string()
     .min(1, "Section content is required")

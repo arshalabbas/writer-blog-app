@@ -45,6 +45,7 @@ model Account {
 // Blogs
 model Blog {
   id          String        @id @default(uuid())
+  slug        String        @unique
   title       String
   description String
   image       String?

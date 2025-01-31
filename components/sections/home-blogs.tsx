@@ -8,6 +8,7 @@ const HomeBlogs = async () => {
     <div className="flex flex-1 flex-col gap-5">
       {blogs.map((blog) => (
         <BlogCard
+          slug={blog.slug}
           key={blog.id}
           title={blog.title}
           description={blog.description}

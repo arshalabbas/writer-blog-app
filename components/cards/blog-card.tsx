@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import IconButton from "../ui/icon-button";
 
 interface Props {
+  slug: string;
   title: string;
   description?: string;
   image?: string;
@@ -12,10 +13,17 @@ interface Props {
   author: { username: string; image: string | null };
 }
 
-const BlogCard = ({ title, description, author, createdAt, image }: Props) => {
+const BlogCard = ({
+  slug,
+  title,
+  description,
+  author,
+  createdAt,
+  image,
+}: Props) => {
   return (
     <Link
-      href={"/blog"}
+      href={`/blog/${slug}`}
       className="border-b border-secondary p-1 hover:bg-primary-foreground"
     >
       {/* Header */}

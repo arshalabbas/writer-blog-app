@@ -1,9 +1,10 @@
 "use server";
 
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { blogSchema } from "@/lib/schemas/blog.schema";
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { generateSlug } from "../utils";
 
 export const createBlog = async (data: unknown) => {
   const session = await auth();
@@ -16,8 +17,19 @@ export const createBlog = async (data: unknown) => {
 
   const { title, description, image, sections, thumbnail } = validate.data;
 
+  const slug = generateSlug(title);
+
+  let uniqueSlug = slug;
+  let count = 1;
+
+  while (await prisma.blog.findUnique({ where: { slug: uniqueSlug } })) {
+    uniqueSlug = `${slug}-${count}`;
+    count++;
+  }
+
   await prisma.blog.create({
     data: {
+      slug: uniqueSlug,
       title,
       description,
       image,
@@ -40,4 +52,16 @@ export const getAllBlogs = async () => {
   });
 
   return blogs;
+};
+
+export const getBlogBySlug = async (slug: string) => {
+  const blog = await prisma.blog.findUnique({
+    where: { slug },
+    include: {
+      author: { select: { username: true, image: true } },
+      sections: true,
+    },
+  });
+
+  return blog;
 };

@@ -67,6 +67,10 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer utilities {
   .view-area {
     padding-right: 15px;
@@ -88,5 +92,25 @@
     .view-area {
       width: 1170px;
     }
+  }
+}
+
+@layer components {
+  .blog-title,
+  .blog-subtle,
+  .blog-description {
+    @apply w-full;
+  }
+
+  .blog-title {
+    @apply text-3xl font-bold md:text-5xl;
+  }
+
+  .blog-subtle {
+    @apply text-xl font-bold md:text-2xl;
+  }
+
+  .blog-description {
+    @apply text-lg font-normal md:text-xl;
   }
 }

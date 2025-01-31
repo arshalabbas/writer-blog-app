@@ -56,7 +56,7 @@ const inputStyles = cva("outline-none border-none w-full resize-none", {
     textType: {
       title: "text-3xl md:text-5xl font-bold",
       subtle: "text-xl md:text-2xl font-bold",
-      description: "text-lg md:text-xl font-regular",
+      description: "text-lg md:text-xl font-input",
     },
   },
   defaultVariants: {
