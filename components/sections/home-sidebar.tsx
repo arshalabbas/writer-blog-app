@@ -12,21 +12,21 @@ const HomeSidebar = () => {
         <ToggleGroupItem value="a">AI</ToggleGroupItem>
         <ToggleGroupItem value="b">JavaScript</ToggleGroupItem>
         <ToggleGroupItem value="c">Python</ToggleGroupItem>
-        <ToggleGroupItem value="a">Next.js</ToggleGroupItem>
-        <ToggleGroupItem value="b">LLM</ToggleGroupItem>
-        <ToggleGroupItem value="c">LifeStyles</ToggleGroupItem>
-        <ToggleGroupItem value="a">Music</ToggleGroupItem>
-        <ToggleGroupItem value="b">Sports</ToggleGroupItem>
-        <ToggleGroupItem value="c">Entertainment</ToggleGroupItem>
-        <ToggleGroupItem value="a">Video Games</ToggleGroupItem>
-        <ToggleGroupItem value="b">Elden Ring</ToggleGroupItem>
-        <ToggleGroupItem value="c">Interstellar</ToggleGroupItem>
-        <ToggleGroupItem value="a">Movies</ToggleGroupItem>
-        <ToggleGroupItem value="b">Art</ToggleGroupItem>
-        <ToggleGroupItem value="c">Coding</ToggleGroupItem>
-        <ToggleGroupItem value="a">Software Developer</ToggleGroupItem>
-        <ToggleGroupItem value="b">Dubai</ToggleGroupItem>
-        <ToggleGroupItem value="c">DeepSeek</ToggleGroupItem>
+        <ToggleGroupItem value="d">Next.js</ToggleGroupItem>
+        <ToggleGroupItem value="e">LLM</ToggleGroupItem>
+        <ToggleGroupItem value="f">LifeStyles</ToggleGroupItem>
+        <ToggleGroupItem value="g">Music</ToggleGroupItem>
+        <ToggleGroupItem value="h">Sports</ToggleGroupItem>
+        <ToggleGroupItem value="i">Entertainment</ToggleGroupItem>
+        <ToggleGroupItem value="j">Video Games</ToggleGroupItem>
+        <ToggleGroupItem value="k">Elden Ring</ToggleGroupItem>
+        <ToggleGroupItem value="l">Interstellar</ToggleGroupItem>
+        <ToggleGroupItem value="m">Movies</ToggleGroupItem>
+        <ToggleGroupItem value="n">Art</ToggleGroupItem>
+        <ToggleGroupItem value="o">Coding</ToggleGroupItem>
+        <ToggleGroupItem value="p">Software Developer</ToggleGroupItem>
+        <ToggleGroupItem value="q">Dubai</ToggleGroupItem>
+        <ToggleGroupItem value="r">DeepSeek</ToggleGroupItem>
       </ToggleGroup>
     </aside>
   );

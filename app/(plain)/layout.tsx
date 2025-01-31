@@ -1,7 +1,8 @@
 import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../globals.css";
+import "@/app/globals.css";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +29,9 @@ const AuthLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <main>{children}</main>
+        <main>
+          <EdgeStoreProvider>{children}</EdgeStoreProvider>
+        </main>
         <Toaster />
       </body>
     </html>

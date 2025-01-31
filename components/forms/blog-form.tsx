@@ -59,7 +59,6 @@ const BlogForm = () => {
         className="flex w-full max-w-[800px] flex-col gap-5 pb-20"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <h1 className="text-2xl font-bold">Create new blog</h1>
         {/* Image */}
         <FormField
           name="image"
