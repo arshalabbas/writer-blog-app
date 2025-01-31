@@ -14,7 +14,10 @@ interface Props {
 
 const BlogCard = ({ title, description, author, createdAt, image }: Props) => {
   return (
-    <Link href={"/blog"} className="border-b border-secondary">
+    <Link
+      href={"/blog"}
+      className="border-b border-secondary p-1 hover:bg-primary-foreground"
+    >
       {/* Header */}
       <div>
         <Redirect
