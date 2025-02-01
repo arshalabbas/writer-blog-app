@@ -1,4 +1,3 @@
-import LogoutButton from "@/components/logout-button";
 import HomeBlogs from "@/components/sections/home-blogs";
 import HomeSidebar from "@/components/sections/home-sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -21,7 +20,6 @@ const Home = async () => {
           <HomeSidebar />
         </div>
       </div>
-      <LogoutButton />
     </div>
   );
 };

@@ -3,10 +3,24 @@ import React from "react";
 import { Input } from "../ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { Bell, Plus, Search } from "lucide-react";
+import {
+  Bell,
+  LogOut,
+  Plus,
+  Search,
+  Settings,
+  User,
+  UserPlus,
+} from "lucide-react";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
 import { fallbackAvatar } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const Navbar = async () => {
   const session = await auth();
@@ -49,17 +63,49 @@ const Navbar = async () => {
                 <Bell />
               </Button>
             </div>
-            <Avatar>
-              <AvatarImage src={session.user?.image || ""} />
-              <AvatarFallback>
-                {fallbackAvatar(session.user.username)}
-              </AvatarFallback>
-            </Avatar>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Avatar>
+                  <AvatarImage src={session.user?.image || ""} />
+                  <AvatarFallback>
+                    {fallbackAvatar(session.user.username)}
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild>
+                  <Link href={"/profile"}>
+                    <User /> Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={"/settings"}>
+                    <Settings /> Settings
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={"/api/auth/signout"}>
+                    <LogOut /> Logout
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </>
         ) : (
-          <Link href={"/login"}>
-            <Button>Login</Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link href={"/signup"}>
+              <Button variant={"outline"}>
+                <UserPlus />
+                Sign Up
+              </Button>
+            </Link>
+            <Link href={"/login"}>
+              <Button>
+                <User />
+                Login
+              </Button>
+            </Link>
+          </div>
         )}
       </div>
     </nav>

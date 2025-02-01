@@ -1,15 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import useAction from "@/hooks/use-action";
+import { deleteComment } from "@/lib/actions/blog.actions";
+import { fallbackAvatar } from "@/lib/utils";
 import { EllipsisVertical } from "lucide-react";
-import { Button } from "../ui/button";
+import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,8 +15,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
-import { deleteComment } from "@/lib/actions/blog.actions";
-import { fallbackAvatar } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 interface Props {
   id: string;
@@ -38,9 +39,13 @@ interface Props {
 const CommentCard = ({ id, userId, author, content, createdAt }: Props) => {
   const [showAlert, setShowAlert] = useState(false);
 
+  const { execute, isPending } = useAction();
+
   const onDelete = async () => {
-    await deleteComment(id);
-    setShowAlert(false);
+    execute(async () => {
+      await deleteComment(id);
+      setShowAlert(false);
+    });
   };
   return (
     <div className="relative flex items-center justify-between border-b border-secondary pb-4">
@@ -90,10 +95,15 @@ const CommentCard = ({ id, userId, author, content, createdAt }: Props) => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setShowAlert(false)}>
+            <AlertDialogCancel
+              onClick={() => setShowAlert(false)}
+              disabled={isPending}
+            >
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction onClick={onDelete}>Continue</AlertDialogAction>
+            <AlertDialogAction onClick={onDelete} disabled={isPending}>
+              {isPending ? "Deleting..." : "Continue"}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

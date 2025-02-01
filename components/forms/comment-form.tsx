@@ -17,6 +17,7 @@ import { Textarea } from "../ui/textarea";
 import { postComment } from "@/lib/actions/blog.actions";
 import { useToast } from "@/hooks/use-toast";
 import { fallbackAvatar } from "@/lib/utils";
+import useAction from "@/hooks/use-action";
 
 interface Props {
   blogId: string;
@@ -35,8 +36,11 @@ const CommentForm = ({ blogId, slug, username, avatar }: Props) => {
 
   const { toast } = useToast();
 
+  const { execute, isPending } = useAction();
+
   const onSubmit = async (data: CommentSchema) => {
-    await postComment(slug, blogId, data.content).then(() => {
+    execute(async () => {
+      await postComment(slug, blogId, data.content);
       toast({
         title: "Comment posted!",
       });
@@ -47,7 +51,7 @@ const CommentForm = ({ blogId, slug, username, avatar }: Props) => {
 
   return (
     <div className="my-4 flex w-full items-start gap-4">
-      <Avatar>
+      <Avatar className="hidden sm:block">
         <AvatarImage src={avatar} />
         <AvatarFallback>{fallbackAvatar(username)}</AvatarFallback>
       </Avatar>
@@ -71,8 +75,12 @@ const CommentForm = ({ blogId, slug, username, avatar }: Props) => {
                       />
                     </FormControl>
                     <div className="absolute bottom-2 right-2">
-                      <Button className="rounded-full" size={"icon"}>
-                        <MessageCircle />
+                      <Button
+                        className="rounded-full"
+                        size={isPending ? "default" : "icon"}
+                        disabled={isPending}
+                      >
+                        <MessageCircle /> {isPending && "Posting..."}
                       </Button>
                     </div>
                   </div>

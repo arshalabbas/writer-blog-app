@@ -18,6 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import useAction from "@/hooks/use-action";
 
 export function SignUpForm({
   className,
@@ -34,8 +35,11 @@ export function SignUpForm({
 
   const { toast } = useToast();
 
+  const { execute, isPending } = useAction();
+
   const onSubmit = async (data: SignUpSchema) => {
-    await singUpUser(data).then((res) => {
+    execute(async () => {
+      const res = await singUpUser(data);
       if (res.error) {
         toast({
           title: "Signup Failed",
@@ -48,7 +52,6 @@ export function SignUpForm({
         toast({
           title: "Signup Successful",
           description: "Now login to access the app.",
-          className: "bg-green-500 text-white border-transparent",
         });
         redirect("/login");
       }
@@ -110,8 +113,8 @@ export function SignUpForm({
             </FormItem>
           )}
         />
-        <Button type="submit" className="mt-3 w-full">
-          Create account
+        <Button type="submit" className="mt-3 w-full" disabled={isPending}>
+          {isPending ? "Loading..." : "Create account"}
         </Button>
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border"></div>
         <div className="text-center text-sm">

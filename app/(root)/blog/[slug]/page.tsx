@@ -111,7 +111,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
             <PackageOpen size={30} /> No comments
           </div>
         )}
-        <div className="flex flex-col gap-4 pb-10">
+        <div className="flex flex-col gap-4 pb-20">
           {comments.map((comment) => (
             <CommentCard
               id={comment.id}

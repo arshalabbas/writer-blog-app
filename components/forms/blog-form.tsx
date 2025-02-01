@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Progress } from "../ui/progress";
+import useAction from "@/hooks/use-action";
 
 const BlogForm = () => {
   const [file, setFile] = useState<File>();
@@ -39,18 +40,29 @@ const BlogForm = () => {
 
   const { edgestore } = useEdgeStore();
 
-  const onSubmit = async (data: BlogSchema) => {
-    if (file) {
-      const res = await edgestore.publicFiles.upload({
-        file,
-        input: { type: "blog" },
-        onProgressChange: setProgress,
-      });
+  const { execute, isPending } = useAction();
 
-      createBlog({ ...data, image: res.url, thumbnail: res.thumbnailUrl });
-    } else {
-      createBlog(data);
-    }
+  const onSubmit = async (data: BlogSchema) => {
+    execute(async () => {
+      if (file) {
+        const res = await edgestore.publicFiles.upload({
+          file,
+          input: { type: "blog" },
+          onProgressChange: (progress) => {
+            console.log(progress);
+            setProgress(progress);
+          },
+        });
+
+        await createBlog({
+          ...data,
+          image: res.url,
+          thumbnail: res.thumbnailUrl,
+        });
+      } else {
+        await createBlog(data);
+      }
+    });
   };
 
   return (
@@ -191,16 +203,16 @@ const BlogForm = () => {
         </div>
         <div className="fixed bottom-0 left-0 right-0 z-50 h-[62px] w-full border-t border-slate-400/30 bg-background">
           <div className="view-area flex h-full w-full items-center justify-end gap-5">
-            {progress > 0 ? (
+            {progress > 0 && (
               <div className="flex items-center gap-2">
                 <span className="font-semibold">Uploading</span>
                 <Progress value={progress} className="w-64" />
               </div>
-            ) : (
-              <Button type="submit">
-                <Plus /> Publish
-              </Button>
             )}
+
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Publishing..." : "Publish"}
+            </Button>
           </div>
         </div>
       </form>

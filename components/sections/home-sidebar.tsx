@@ -4,6 +4,7 @@ import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 const HomeSidebar = () => {
   return (
     <aside>
+      <h1 className="mb-3 text-lg font-medium">Popular Topics</h1>
       <ToggleGroup
         type="single"
         variant={"outline"}

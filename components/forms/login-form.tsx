@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import useAction from "@/hooks/use-action";
 
 export function LoginForm({
   className,
@@ -32,8 +33,11 @@ export function LoginForm({
 
   const { toast } = useToast();
 
+  const { execute, isPending } = useAction();
+
   const onSubmit = async (data: LoginSchema) => {
-    loginUser(data).then((res) => {
+    execute(async () => {
+      const res = await loginUser(data);
       if (res.error) {
         toast({
           title: "Login Failed",
@@ -93,8 +97,8 @@ export function LoginForm({
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Login
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending ? "Loading..." : "Login"}
         </Button>
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border"></div>
         <div className="text-center text-sm">
