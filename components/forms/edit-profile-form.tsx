@@ -35,12 +35,14 @@ import { useEdgeStore } from "@/lib/edgestore";
 
 interface Props {
   username: string;
-  name?: string;
-  image?: string;
+  name: string | null;
+  image: string | null;
 }
 
 const EditProfileForm = ({ image, name, username }: Props) => {
-  const [file, setFile] = useState<File | string | undefined>(image);
+  const [file, setFile] = useState<File | string | undefined>(
+    image ?? undefined,
+  );
 
   const form = useForm<EditProfileSchema>({
     defaultValues: {
@@ -68,32 +70,20 @@ const EditProfileForm = ({ image, name, username }: Props) => {
         return;
       }
 
+      let imageUrl = data.image;
+
+      if (!file) imageUrl = "";
+
       if (file instanceof File) {
         const uploadRes = await edgestore.publicFiles.upload({
           file,
           input: { type: "profile" },
         });
 
-        const res = await updateProfile({ ...data, image: uploadRes.url });
-
-        if (res?.error) {
-          toast({
-            title: "Error updating profile.",
-            description: res.error,
-            variant: "destructive",
-          });
-          return;
-        }
-
-        toast({
-          title: "Profile updated successfully.",
-          description: "Your profile has been updated.",
-        });
-
-        return;
+        imageUrl = uploadRes.url;
       }
 
-      const res = await updateProfile(data);
+      const res = await updateProfile({ ...data, image: imageUrl });
 
       if (res?.error) {
         toast({
@@ -135,6 +125,7 @@ const EditProfileForm = ({ image, name, username }: Props) => {
                     className="aspect-square size-20"
                     value={file}
                     onChange={setFile}
+                    alt="Profile Image"
                   />
                 </FormControl>
                 <FormMessage />

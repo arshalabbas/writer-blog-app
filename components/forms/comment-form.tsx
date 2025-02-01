@@ -52,7 +52,7 @@ const CommentForm = ({ blogId, slug, username, avatar }: Props) => {
   return (
     <div className="my-4 flex w-full items-start gap-4">
       <Avatar className="hidden sm:block">
-        <AvatarImage src={avatar} />
+        <AvatarImage src={avatar ?? undefined} />
         <AvatarFallback>{fallbackAvatar(username)}</AvatarFallback>
       </Avatar>
       <Form {...form}>

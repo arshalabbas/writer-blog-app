@@ -51,7 +51,7 @@ const CommentCard = ({ id, userId, author, content, createdAt }: Props) => {
     <div className="relative flex items-center justify-between border-b border-secondary pb-4">
       <div className="flex space-x-4">
         <Avatar>
-          <AvatarImage src={author.image || ""} />
+          <AvatarImage src={author.image ?? undefined} />
           <AvatarFallback>{fallbackAvatar(author.username)}</AvatarFallback>
         </Avatar>
         <div className="space-y-1">

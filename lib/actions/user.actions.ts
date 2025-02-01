@@ -41,7 +41,7 @@ export const updateProfile = async (data: unknown) => {
       return { error: "Username already taken." };
     }
 
-    if (session.user.image && image && session.user.image !== image) {
+    if (session.user.image && (!image || session.user.image !== image)) {
       edgeStoreClient.publicFiles.deleteFile({ url: session.user.image });
     }
 

@@ -15,7 +15,7 @@ const ProfileCard = ({ username, image, bio, footer }: Props) => {
     <div className="flex items-center justify-between">
       <div className="flex space-x-4">
         <Avatar>
-          <AvatarImage src={image} />
+          <AvatarImage src={image ?? undefined} />
           <AvatarFallback>{fallbackAvatar(username)}</AvatarFallback>
         </Avatar>
         <div className="space-y-1">

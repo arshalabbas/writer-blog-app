@@ -14,13 +14,13 @@ const ProfileHeader = async ({ userId }: Props) => {
   const user = await getUserById(userId);
   if (!user) return null;
 
-  const { username, image } = user;
+  const { name, username, image } = user;
 
   return (
     <div className="w-full">
       <div className="flex items-start gap-4">
         <Avatar className="size-20">
-          <AvatarImage src={image || ""} />
+          <AvatarImage src={image ?? undefined} />
           <AvatarFallback className="text-3xl">
             {fallbackAvatar(username)}
           </AvatarFallback>
@@ -35,7 +35,7 @@ const ProfileHeader = async ({ userId }: Props) => {
                 <Pencil /> Edit Profile
               </Button>
             </DialogTrigger>
-            <EditProfileForm username={username} />
+            <EditProfileForm username={username} name={name} image={image} />
           </Dialog>
         </div>
       </div>

@@ -66,7 +66,7 @@ const Navbar = async () => {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>
-                  <AvatarImage src={session.user?.image || ""} />
+                  <AvatarImage src={session.user?.image ?? undefined} />
                   <AvatarFallback>
                     {fallbackAvatar(session.user.username)}
                   </AvatarFallback>

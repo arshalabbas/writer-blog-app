@@ -24,6 +24,7 @@ type InputProps = {
   onChange?: (file?: File) => void | Promise<void>;
   disabled?: boolean;
   dropzoneOptions?: Omit<DropzoneOptions, "disabled">;
+  alt?: string;
 };
 
 const ERROR_MESSAGES = {
@@ -42,7 +43,7 @@ const ERROR_MESSAGES = {
 };
 
 const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ dropzoneOptions, value, className, disabled, onChange }, ref) => {
+  ({ dropzoneOptions, value, className, disabled, onChange, alt }, ref) => {
     const imageUrl = React.useMemo(() => {
       if (typeof value === "string") {
         // in case an url is passed in, use it to display the image
@@ -133,7 +134,7 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
               width={500}
               height={350}
               src={imageUrl}
-              alt={acceptedFiles[0]?.name}
+              alt={alt ?? acceptedFiles[0]?.name}
             />
           ) : (
             // Upload Icon
