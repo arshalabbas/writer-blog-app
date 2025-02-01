@@ -1,4 +1,5 @@
 import { initEdgeStore } from "@edgestore/server";
+import { initEdgeStoreClient } from "@edgestore/server/core";
 import { createEdgeStoreNextHandler } from "@edgestore/server/adapters/next/app";
 import { z } from "zod";
 
@@ -22,3 +23,7 @@ const handler = createEdgeStoreNextHandler({
 export { handler as GET, handler as POST };
 
 export type EdgeStoreRouter = typeof edgeStoreRouter;
+
+export const edgeStoreClient = initEdgeStoreClient({
+  router: edgeStoreRouter,
+});

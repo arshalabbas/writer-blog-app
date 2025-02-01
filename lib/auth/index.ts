@@ -9,6 +9,8 @@ const adapter = PrismaAdapter(prisma);
 declare module "next-auth" {
   interface Session {
     user: {
+      name: string;
+      id: string;
       image: string;
       username: string;
     } & DefaultSession["user"];
@@ -26,6 +28,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (!existingUser) return token;
 
+      token.name = existingUser.name;
       token.username = existingUser.username;
       token.image = existingUser.image;
       token.email = existingUser.email;
@@ -38,6 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         user: {
           ...session.user,
           id: token.sub,
+          name: token.name,
           username: token.username,
           image: token.image,
           email: token.email,
