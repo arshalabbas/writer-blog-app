@@ -3,6 +3,7 @@ import Link from "next/link";
 import Redirect from "../misc/redirect";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import IconButton from "../ui/icon-button";
+import { fallbackAvatar } from "@/lib/utils";
 
 interface Props {
   slug: string;
@@ -38,7 +39,7 @@ const BlogCard = ({
               alt={`avatar-of-${author.username}`}
             />
             <AvatarFallback className="text-xs">
-              {author.username[0].toUpperCase()}
+              {fallbackAvatar(author.username)}
             </AvatarFallback>
           </Avatar>
           <span className="text-sm group-hover:underline">

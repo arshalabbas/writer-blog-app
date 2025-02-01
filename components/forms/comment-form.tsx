@@ -16,13 +16,16 @@ import {
 import { Textarea } from "../ui/textarea";
 import { postComment } from "@/lib/actions/blog.actions";
 import { useToast } from "@/hooks/use-toast";
+import { fallbackAvatar } from "@/lib/utils";
 
 interface Props {
   blogId: string;
   slug: string;
+  username: string;
+  avatar: string;
 }
 
-const CommentForm = ({ blogId, slug }: Props) => {
+const CommentForm = ({ blogId, slug, username, avatar }: Props) => {
   const form = useForm<CommentSchema>({
     defaultValues: {
       content: "",
@@ -45,8 +48,8 @@ const CommentForm = ({ blogId, slug }: Props) => {
   return (
     <div className="my-4 flex w-full items-start gap-4">
       <Avatar>
-        <AvatarImage />
-        <AvatarFallback>A</AvatarFallback>
+        <AvatarImage src={avatar} />
+        <AvatarFallback>{fallbackAvatar(username)}</AvatarFallback>
       </Avatar>
       <Form {...form}>
         <form

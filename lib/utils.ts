@@ -11,3 +11,7 @@ export function generateSlug(text: string): string {
     .replace(/ /g, "-")
     .replace(/[^\w-]+/g, "");
 }
+
+export function fallbackAvatar(username: string): string {
+  return username.toUpperCase()[0];
+}

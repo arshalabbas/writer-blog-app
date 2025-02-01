@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { Bell, Plus, Search } from "lucide-react";
 import { auth } from "@/lib/auth";
 import Link from "next/link";
+import { fallbackAvatar } from "@/lib/utils";
 
 const Navbar = async () => {
   const session = await auth();
@@ -51,7 +52,7 @@ const Navbar = async () => {
             <Avatar>
               <AvatarImage src={session.user?.image || ""} />
               <AvatarFallback>
-                {(session.user?.email || "")[0].toUpperCase()}
+                {fallbackAvatar(session.user.username)}
               </AvatarFallback>
             </Avatar>
           </>

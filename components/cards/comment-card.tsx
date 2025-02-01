@@ -21,6 +21,7 @@ import {
   AlertDialogTitle,
 } from "../ui/alert-dialog";
 import { deleteComment } from "@/lib/actions/blog.actions";
+import { fallbackAvatar } from "@/lib/utils";
 
 interface Props {
   id: string;
@@ -46,7 +47,7 @@ const CommentCard = ({ id, userId, author, content, createdAt }: Props) => {
       <div className="flex space-x-4">
         <Avatar>
           <AvatarImage src={author.image || ""} />
-          <AvatarFallback>{author.username.toUpperCase()[0]}</AvatarFallback>
+          <AvatarFallback>{fallbackAvatar(author.username)}</AvatarFallback>
         </Avatar>
         <div className="space-y-1">
           <h4 className="text-sm font-semibold">@{author.username}</h4>

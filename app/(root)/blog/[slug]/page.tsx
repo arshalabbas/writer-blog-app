@@ -89,7 +89,12 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
       <div className="mt-10 w-full max-w-[800px]">
         <div className="text-lg font-semibold">Comments</div>
         {session ? (
-          <CommentForm blogId={id} slug={slug} />
+          <CommentForm
+            blogId={id}
+            slug={slug}
+            avatar={session.user.image}
+            username={session.user.username}
+          />
         ) : (
           <div className="mb-10 flex w-full items-center justify-center gap-2 bg-primary-foreground p-10">
             You need an account to comment.
