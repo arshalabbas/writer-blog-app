@@ -32,14 +32,16 @@ import {
   userExistWithUsername,
 } from "@/lib/actions/user.actions";
 import { useEdgeStore } from "@/lib/edgestore";
+import { Textarea } from "../ui/textarea";
 
 interface Props {
   username: string;
   name: string | null;
   image: string | null;
+  bio: string | null;
 }
 
-const EditProfileForm = ({ image, name, username }: Props) => {
+const EditProfileForm = ({ image, name, username, bio }: Props) => {
   const [file, setFile] = useState<File | string | undefined>(
     image ?? undefined,
   );
@@ -49,6 +51,7 @@ const EditProfileForm = ({ image, name, username }: Props) => {
       name: name || "",
       username: username,
       image: image || "",
+      bio: bio || "",
     },
     resolver: zodResolver(editProfileSchema),
   });
@@ -139,7 +142,7 @@ const EditProfileForm = ({ image, name, username }: Props) => {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input id="name" className="col-span-3" {...field} />
+                  <Input className="col-span-3" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -152,7 +155,20 @@ const EditProfileForm = ({ image, name, username }: Props) => {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input id="username" className="col-span-3" {...field} />
+                  <Input className="col-span-3" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Textarea className="col-span-3" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

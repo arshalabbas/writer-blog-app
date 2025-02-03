@@ -1,31 +1,69 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import Redirect from "../misc/redirect";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import IconButton from "../ui/icon-button";
 import { fallbackAvatar } from "@/lib/utils";
+import { useState } from "react";
+import useAction from "@/hooks/use-action";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { EllipsisVertical, Pencil, Trash } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
+import { deleteBlogById } from "@/lib/actions/blog.actions";
 
 interface Props {
+  id: string;
   slug: string;
   title: string;
   description?: string;
   image?: string;
   createdAt: Date;
-  author: { username: string; image: string | null };
+  author: { id: string; username: string; image: string | null };
+  userId: string;
 }
 
 const BlogCard = ({
+  id,
   slug,
   title,
   description,
   author,
   createdAt,
   image,
+  userId,
 }: Props) => {
+  console.log(userId, author.id);
+  const [showAlert, setShowAlert] = useState(false);
+
+  const { execute, isPending } = useAction();
+
+  const onDelete = async () => {
+    execute(async () => {
+      await deleteBlogById(id);
+      setShowAlert(false);
+    });
+  };
   return (
     <Link
       href={`/blog/${slug}`}
-      className="border-b border-secondary p-1 hover:bg-primary-foreground"
+      className="relative border-b border-secondary p-1 hover:bg-primary-foreground"
     >
       {/* Header */}
       <div>
@@ -80,6 +118,65 @@ const BlogCard = ({
           <IconButton icon="message" label="2.2k" />
         </div>
       </div>
+
+      {userId === author.id && (
+        <div className="absolute right-0 top-0">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size={"icon"} variant={"ghost"}>
+                <EllipsisVertical />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem className="cursor-pointer">
+                <Pencil />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowAlert(true);
+                }}
+                className="cursor-pointer"
+              >
+                <Trash />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
+
+      <AlertDialog open={showAlert}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={(e) => {
+                e.preventDefault();
+                setShowAlert(false);
+              }}
+              disabled={isPending}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                onDelete();
+              }}
+              disabled={isPending}
+            >
+              {isPending ? "Deleting..." : "Continue"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Link>
   );
 };

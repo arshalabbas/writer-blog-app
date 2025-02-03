@@ -30,7 +30,7 @@ export const updateProfile = async (data: unknown) => {
       return { error: "Invalid data provided." };
     }
 
-    const { username, name, image } = validatedData.data;
+    const { username, name, image, bio } = validatedData.data;
 
     const existingUserWithTheUsername = await userExistWithUsername(username);
 
@@ -47,7 +47,7 @@ export const updateProfile = async (data: unknown) => {
 
     await prisma.user.update({
       where: { id: session.user.id },
-      data: { username, name, image },
+      data: { username, name, image, bio },
     });
 
     revalidatePath("/profile");

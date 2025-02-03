@@ -12,6 +12,7 @@ model User {
   id        String    @id @default(uuid())
   name      String?
   image     String?
+  bio       String?
   email     String    @unique
   username  String    @unique
   password  String

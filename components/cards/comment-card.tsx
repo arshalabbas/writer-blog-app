@@ -3,7 +3,7 @@
 import useAction from "@/hooks/use-action";
 import { deleteComment } from "@/lib/actions/blog.actions";
 import { fallbackAvatar } from "@/lib/utils";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, Trash } from "lucide-react";
 import { useState } from "react";
 import {
   AlertDialog,
@@ -79,6 +79,7 @@ const CommentCard = ({ id, userId, author, content, createdAt }: Props) => {
                 onClick={() => setShowAlert(true)}
                 className="cursor-pointer"
               >
+                <Trash />
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>

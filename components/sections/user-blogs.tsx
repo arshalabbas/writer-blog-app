@@ -1,10 +1,14 @@
-import { getAllBlogs } from "@/lib/actions/blog.actions";
+import { getBlogsByUserId } from "@/lib/actions/blog.actions";
 import BlogCard from "../cards/blog-card";
 import { auth } from "@/lib/auth";
 
-const HomeBlogs = async () => {
-  const blogs = await getAllBlogs();
+interface Props {
+  authorId: string;
+}
+
+const UserBlogs = async ({ authorId }: Props) => {
   const session = await auth();
+  const blogs = await getBlogsByUserId(authorId);
 
   if (!session) return null;
 
@@ -28,4 +32,4 @@ const HomeBlogs = async () => {
   );
 };
 
-export default HomeBlogs;
+export default UserBlogs;

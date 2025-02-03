@@ -6,6 +6,7 @@ import { blogSchema } from "@/lib/schemas/blog.schema";
 import { redirect } from "next/navigation";
 import { generateSlug } from "../utils";
 import { revalidatePath } from "next/cache";
+import { edgeStoreClient } from "../edgestore/edgestore.config";
 
 export const createBlog = async (data: unknown) => {
   const session = await auth();
@@ -51,7 +52,17 @@ export const getAllBlogs = async () => {
   // console.log(userId);
   const blogs = await prisma.blog.findMany({
     // where: { author: { id: { not: session?.user?.id } } },
-    include: { author: { select: { username: true, image: true } } },
+    include: { author: { select: { id: true, username: true, image: true } } },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return blogs;
+};
+
+export const getBlogsByUserId = async (userId: string) => {
+  const blogs = await prisma.blog.findMany({
+    where: { authorId: userId },
+    include: { author: { select: { id: true, username: true, image: true } } },
     orderBy: { createdAt: "desc" },
   });
 
@@ -62,7 +73,15 @@ export const getBlogBySlug = async (slug: string) => {
   const blog = await prisma.blog.findUnique({
     where: { slug },
     include: {
-      author: { select: { username: true, image: true } },
+      author: {
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          image: true,
+          bio: true,
+        },
+      },
       sections: { orderBy: { order: "asc" } },
       comments: {
         include: {
@@ -74,6 +93,14 @@ export const getBlogBySlug = async (slug: string) => {
   });
 
   return blog;
+};
+
+export const deleteBlogById = async (id: string) => {
+  const blog = await prisma.blog.delete({ where: { id } });
+
+  if (blog.image) edgeStoreClient.publicFiles.deleteFile({ url: blog.image });
+
+  redirect("/");
 };
 
 export const postComment = async (

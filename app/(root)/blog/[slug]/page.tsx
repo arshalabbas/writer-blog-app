@@ -17,7 +17,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const blog = await getBlogBySlug(slug);
   const session = await auth();
 
-  if (!blog) return null;
+  if (!blog || !session) return null;
 
   const {
     id,
@@ -37,8 +37,10 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
         <ProfileCard
           username={author.username}
           image={author.image || ""}
-          bio="Experienced React Developer"
+          bio={author.bio}
           footer={new Date(createdAt).toLocaleString()}
+          authorId={author.id}
+          userId={session?.user.id}
         />
 
         <Separator />
