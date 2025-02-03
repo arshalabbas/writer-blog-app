@@ -1,17 +1,17 @@
-import { getBlogsByUserId } from "@/lib/actions/blog.actions";
-import BlogCard from "../cards/blog-card";
+import { getBlogsByUsername } from "@/lib/actions/blog.actions";
 import { auth } from "@/lib/auth";
 import { PackageOpen, Plus } from "lucide-react";
 import Link from "next/link";
+import BlogCard from "../cards/blog-card";
 import { Button } from "../ui/button";
 
 interface Props {
-  authorId: string;
+  username: string;
 }
 
-const UserBlogs = async ({ authorId }: Props) => {
+const UserBlogs = async ({ username }: Props) => {
   const session = await auth();
-  const blogs = await getBlogsByUserId(authorId);
+  const blogs = await getBlogsByUsername(username);
 
   if (!session) return null;
 

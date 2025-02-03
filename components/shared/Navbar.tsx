@@ -74,7 +74,7 @@ const Navbar = async () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem asChild>
-                  <Link href={"/profile"}>
+                  <Link href={`/writer/${session.user.username}`}>
                     <User /> Profile
                   </Link>
                 </DropdownMenuItem>

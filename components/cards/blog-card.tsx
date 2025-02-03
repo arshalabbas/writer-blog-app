@@ -69,7 +69,7 @@ const BlogCard = ({
       {/* Header */}
       <div>
         <Redirect
-          href={"/profile"}
+          href={`/writer/${author.username}`}
           className="group mb-2 flex w-fit items-center gap-2"
         >
           <Avatar className="size-6">

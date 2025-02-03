@@ -15,6 +15,15 @@ export const getUserById = async (id: string) => {
   return user;
 };
 
+export const getUserByUsername = async (username: string) => {
+  const user = await prisma.user.findUnique({
+    where: { username },
+    omit: { password: true },
+  });
+
+  return user;
+};
+
 export const userExistWithUsername = async (username: string) => {
   return prisma.user.findUnique({ where: { username } });
 };
@@ -50,7 +59,7 @@ export const updateProfile = async (data: unknown) => {
       data: { username, name, image, bio },
     });
 
-    revalidatePath("/profile");
+    revalidatePath(`/writer/${username}`);
   } catch (error) {
     console.log(error);
   }

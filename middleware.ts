@@ -5,7 +5,7 @@ import { auth as middleware } from "@/lib/auth";
 
 const authRoutes = ["/login", "/signup"];
 
-const protectedRoutes = ["/new", "/profile"];
+const protectedRoutes = ["/new", "/writer"];
 
 export default middleware((req) => {
   const session = req.auth;

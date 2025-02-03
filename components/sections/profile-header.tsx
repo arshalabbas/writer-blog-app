@@ -1,20 +1,21 @@
+import { getUserByUsername } from "@/lib/actions/user.actions";
 import { fallbackAvatar } from "@/lib/utils";
-import { Pencil } from "lucide-react";
+import { Pencil, UserPlus } from "lucide-react";
 import EditProfileForm from "../forms/edit-profile-form";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Dialog, DialogTrigger } from "../ui/dialog";
-import { getUserById } from "@/lib/actions/user.actions";
 
 interface Props {
-  userId: string;
+  username: string;
+  authUserId: string;
 }
 
-const ProfileHeader = async ({ userId }: Props) => {
-  const user = await getUserById(userId);
+const ProfileHeader = async ({ username, authUserId }: Props) => {
+  const user = await getUserByUsername(username);
   if (!user) return null;
 
-  const { name, username, image, bio } = user;
+  const { id, name, image, bio } = user;
 
   return (
     <div className="w-full">
@@ -32,19 +33,25 @@ const ProfileHeader = async ({ userId }: Props) => {
               @{username}
             </h1>
             {name && <h2 className="mb-4 text-2xl font-bold">{name}</h2>}
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button>
-                  <Pencil /> Edit Profile
-                </Button>
-              </DialogTrigger>
-              <EditProfileForm
-                username={username}
-                name={name}
-                image={image}
-                bio={bio}
-              />
-            </Dialog>
+            {id === authUserId ? (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button>
+                    <Pencil /> Edit Profile
+                  </Button>
+                </DialogTrigger>
+                <EditProfileForm
+                  username={username}
+                  name={name}
+                  image={image}
+                  bio={bio}
+                />
+              </Dialog>
+            ) : (
+              <Button>
+                <UserPlus /> Follow
+              </Button>
+            )}
           </div>
         </div>
 

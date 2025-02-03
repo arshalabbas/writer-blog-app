@@ -28,7 +28,7 @@ export const bottomNavLinks: BottomLink[] = [
     Icon: Bell,
   },
   {
-    href: "/profile",
+    href: "redirect-profile",
     label: "Profile",
     Icon: User,
   },

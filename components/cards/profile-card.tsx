@@ -24,7 +24,7 @@ const ProfileCard = ({
   console.log(userId, authorId);
   return (
     <div className="flex items-center justify-between">
-      <Link href="/profile">
+      <Link href={`/writer/${username}`}>
         <div className="flex space-x-4">
           <Avatar>
             <AvatarImage src={image ?? undefined} />

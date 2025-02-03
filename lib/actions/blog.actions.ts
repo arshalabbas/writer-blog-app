@@ -105,9 +105,9 @@ export const getAllBlogs = async () => {
   return blogs;
 };
 
-export const getBlogsByUserId = async (userId: string) => {
+export const getBlogsByUsername = async (username: string) => {
   const blogs = await prisma.blog.findMany({
-    where: { authorId: userId },
+    where: { author: { username } },
     include: { author: { select: { id: true, username: true, image: true } } },
     orderBy: { createdAt: "desc" },
   });

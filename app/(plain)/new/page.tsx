@@ -1,6 +1,19 @@
 import BlogForm from "@/components/forms/blog-form";
 import Back from "@/components/misc/back";
 import { ArrowLeft } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "New Blog",
+  description: "Create a new blog on Writers.com",
+  openGraph: {
+    url: "https://writers.com/new",
+    title: "New Blog",
+    description: "Create a new blog on Writers.com",
+    type: "article",
+    siteName: "Writers",
+  },
+};
 
 const NewBlog = async () => {
   return (
