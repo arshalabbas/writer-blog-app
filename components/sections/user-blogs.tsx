@@ -1,6 +1,9 @@
 import { getBlogsByUserId } from "@/lib/actions/blog.actions";
 import BlogCard from "../cards/blog-card";
 import { auth } from "@/lib/auth";
+import { PackageOpen, Plus } from "lucide-react";
+import Link from "next/link";
+import { Button } from "../ui/button";
 
 interface Props {
   authorId: string;
@@ -14,6 +17,16 @@ const UserBlogs = async ({ authorId }: Props) => {
 
   return (
     <div className="flex flex-1 flex-col gap-5">
+      {blogs.length <= 0 && (
+        <div className="flex w-full flex-col items-center justify-center gap-2 py-20 text-2xl text-muted-foreground">
+          <PackageOpen size={30} /> No Blogs yet
+          <Link href={"/new"}>
+            <Button>
+              <Plus /> Write
+            </Button>
+          </Link>
+        </div>
+      )}
       {blogs.map((blog) => (
         <BlogCard
           id={blog.id}
