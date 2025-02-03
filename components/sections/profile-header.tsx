@@ -18,7 +18,7 @@ const ProfileHeader = async ({ userId }: Props) => {
 
   return (
     <div className="w-full">
-      <div className="flex w-full items-center justify-between py-5">
+      <div className="flex w-full items-center justify-between py-5 max-sm:flex-col">
         {/* Profile Content */}
         <div className="flex items-start gap-4">
           <Avatar className="size-20">

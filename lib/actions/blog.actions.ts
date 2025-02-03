@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { blogSchema } from "@/lib/schemas/blog.schema";
+import { BlogSchema, blogSchema } from "@/lib/schemas/blog.schema";
 import { redirect } from "next/navigation";
 import { generateSlug } from "../utils";
 import { revalidatePath } from "next/cache";
@@ -45,6 +45,52 @@ export const createBlog = async (data: unknown) => {
 
   redirect("/");
   return {};
+};
+
+export const updateBlogById = async (id: string, data: BlogSchema) => {
+  const validate = blogSchema.safeParse(data);
+
+  if (!validate.success) {
+    return { error: "Invalid data provided." };
+  }
+
+  const { title, description, image, thumbnail, sections } = validate.data;
+
+  const blog = await getBlogById(id);
+
+  if (!blog) return { error: "Blog not found." };
+
+  if (blog.image) {
+    edgeStoreClient.publicFiles.deleteFile({ url: blog.image });
+  }
+
+  const slug = generateSlug(title);
+
+  let uniqueSlug = slug;
+  let count = 1;
+
+  if (title !== blog.title) {
+    while (await prisma.blog.findUnique({ where: { slug: uniqueSlug } })) {
+      uniqueSlug = `${slug}-${count}`;
+      count++;
+    }
+  }
+
+  await prisma.blogSection.deleteMany({ where: { blogId: id } });
+
+  await prisma.blog.update({
+    where: { id },
+    data: {
+      slug: uniqueSlug,
+      title,
+      description,
+      image,
+      thumbnail,
+      sections: { create: sections },
+    },
+  });
+
+  redirect("/");
 };
 
 export const getAllBlogs = async () => {

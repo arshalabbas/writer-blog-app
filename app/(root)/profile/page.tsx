@@ -22,7 +22,9 @@ const ProfilePage = async ({}) => {
 
       <Separator orientation="vertical" />
 
-      <div className="w-80">sdfdsf</div>
+      <div className="hidden w-80 lg:flex">
+        <div className="text-lg font-bold">Suggested Writers</div>
+      </div>
     </div>
   );
 };

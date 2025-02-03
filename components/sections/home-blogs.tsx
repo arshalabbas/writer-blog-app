@@ -6,8 +6,6 @@ const HomeBlogs = async () => {
   const blogs = await getAllBlogs();
   const session = await auth();
 
-  if (!session) return null;
-
   return (
     <div className="flex flex-1 flex-col gap-5">
       {blogs.map((blog) => (
@@ -20,7 +18,7 @@ const HomeBlogs = async () => {
           createdAt={blog.createdAt}
           image={blog.image || ""}
           author={blog.author}
-          userId={session.user.id}
+          userId={session?.user.id || ""}
         />
       ))}
       <div className="my-10" />

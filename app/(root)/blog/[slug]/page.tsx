@@ -17,7 +17,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const blog = await getBlogBySlug(slug);
   const session = await auth();
 
-  if (!blog || !session) return null;
+  if (!blog) return null;
 
   const {
     id,
@@ -40,7 +40,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
           bio={author.bio}
           footer={new Date(createdAt).toLocaleString()}
           authorId={author.id}
-          userId={session?.user.id}
+          userId={session?.user.id ?? ""}
         />
 
         <Separator />

@@ -21,7 +21,13 @@ const EditBlog = async ({ params }: Props) => {
         <h1 className="text-2xl font-semibold text-primary">Edit your blog</h1>
       </div>
       <div className="flex w-full justify-center gap-4 py-10">
-        <BlogForm />
+        <BlogForm
+          title={blog.title}
+          description={blog.description}
+          sections={blog.sections}
+          image={blog.image ?? undefined}
+          blogId={blog.id}
+        />
       </div>
     </div>
   );
