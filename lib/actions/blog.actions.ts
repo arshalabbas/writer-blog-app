@@ -95,6 +95,17 @@ export const getBlogBySlug = async (slug: string) => {
   return blog;
 };
 
+export const getBlogById = async (id: string) => {
+  const blog = await prisma.blog.findUnique({
+    where: { id },
+    include: {
+      sections: { orderBy: { order: "asc" } },
+    },
+  });
+
+  return blog;
+};
+
 export const deleteBlogById = async (id: string) => {
   const blog = await prisma.blog.delete({ where: { id } });
 

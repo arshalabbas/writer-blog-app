@@ -27,6 +27,7 @@ import {
   AlertDialogTitle,
 } from "../ui/alert-dialog";
 import { deleteBlogById } from "@/lib/actions/blog.actions";
+import { useRouter } from "next/navigation";
 
 interface Props {
   id: string;
@@ -49,7 +50,7 @@ const BlogCard = ({
   image,
   userId,
 }: Props) => {
-  console.log(userId, author.id);
+  const router = useRouter();
   const [showAlert, setShowAlert] = useState(false);
 
   const { execute, isPending } = useAction();
@@ -128,7 +129,13 @@ const BlogCard = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  router.push(`/edit/${id}`);
+                }}
+              >
                 <Pencil />
                 Edit
               </DropdownMenuItem>
