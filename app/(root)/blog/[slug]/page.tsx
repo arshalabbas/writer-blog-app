@@ -11,13 +11,14 @@ import { LogIn, PackageOpen, Share } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const slug = (await params).slug;
   const blog = await getBlogBySlug(slug);
   const session = await auth();
 
-  if (!blog) return null;
+  if (!blog) return notFound();
 
   const {
     id,

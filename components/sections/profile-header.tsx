@@ -1,4 +1,3 @@
-import { getUserByUsername } from "@/lib/actions/user.actions";
 import { fallbackAvatar } from "@/lib/utils";
 import { Pencil, UserPlus } from "lucide-react";
 import EditProfileForm from "../forms/edit-profile-form";
@@ -7,15 +6,18 @@ import { Button } from "../ui/button";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 
 interface Props {
-  username: string;
   authUserId: string;
+  user: {
+    id: string;
+    username: string;
+    name: string;
+    image: string;
+    bio: string;
+  };
 }
 
-const ProfileHeader = async ({ username, authUserId }: Props) => {
-  const user = await getUserByUsername(username);
-  if (!user) return null;
-
-  const { id, name, image, bio } = user;
+const ProfileHeader = async ({ user, authUserId }: Props) => {
+  const { id, username, name, image, bio } = user;
 
   return (
     <div className="w-full">

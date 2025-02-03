@@ -13,8 +13,6 @@ const UserBlogs = async ({ username }: Props) => {
   const session = await auth();
   const blogs = await getBlogsByUsername(username);
 
-  if (!session) return null;
-
   return (
     <div className="flex flex-1 flex-col gap-5">
       {blogs.length <= 0 && (
@@ -37,7 +35,7 @@ const UserBlogs = async ({ username }: Props) => {
           createdAt={blog.createdAt}
           image={blog.image || ""}
           author={blog.author}
-          userId={session.user.id}
+          userId={session?.user.id || ""}
         />
       ))}
       <div className="my-10" />
