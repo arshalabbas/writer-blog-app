@@ -14,11 +14,13 @@ interface Props {
 const ProfilePage = async ({ params }: Props) => {
   const { username } = await params;
   const session = await auth();
-  if (!session) return null;
   return (
     <div className="flex gap-5">
       <div className="flex flex-1 flex-col gap-5">
-        <ProfileHeader username={username} authUserId={session.user.id} />
+        <ProfileHeader
+          username={username}
+          authUserId={session?.user.id || ""}
+        />
 
         <Separator />
         <h5 className="my-2 text-xl font-bold">Your Blogs</h5>
