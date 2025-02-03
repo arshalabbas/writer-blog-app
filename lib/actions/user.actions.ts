@@ -1,6 +1,6 @@
 "use server";
 
-import { edgeStoreClient } from "@/app/api/edgestore/[...edgestore]/route";
+import { edgeStoreClient } from "@/lib/edgestore/edgestore.config";
 import { auth } from "../auth";
 import prisma from "../prisma";
 import { editProfileSchema } from "../schemas/profile.schema";
