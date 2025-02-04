@@ -2,10 +2,10 @@ import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
-import Navbar from "@/components/shared/navbar";
-import Bottombar from "@/components/shared/bottombar";
 import { SessionProvider } from "next-auth/react";
 import { EdgeStoreProvider } from "@/lib/edgestore";
+import Navbar from "@/components/shared/navbar";
+import Bottombar from "@/components/shared/bottombar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
