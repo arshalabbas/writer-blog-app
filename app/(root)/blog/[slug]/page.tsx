@@ -29,6 +29,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     image,
     sections,
     comments,
+    commentsCount,
   } = blog;
 
   return (
@@ -49,7 +50,9 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <IconButton icon="heart" label="10.k" />
-            <IconButton icon="message" label="10.k" />
+            <Link href={`/blog/${slug}#comments`}>
+              <IconButton icon="message" label={commentsCount.toString()} />
+            </Link>
           </div>
 
           <div>
@@ -89,7 +92,7 @@ const BlogPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
       </div>
 
       {/* Comments */}
-      <div className="mt-10 w-full max-w-[800px]">
+      <div className="mt-10 w-full max-w-[800px]" id="comments">
         <div className="text-lg font-semibold">Comments</div>
         {session ? (
           <CommentForm

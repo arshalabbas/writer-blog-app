@@ -38,6 +38,7 @@ interface Props {
   createdAt: Date;
   author: { id: string; username: string; image: string | null };
   userId: string;
+  commentsCount: number;
 }
 
 const BlogCard = ({
@@ -49,6 +50,7 @@ const BlogCard = ({
   createdAt,
   image,
   userId,
+  commentsCount,
 }: Props) => {
   const router = useRouter();
   const [showAlert, setShowAlert] = useState(false);
@@ -116,7 +118,11 @@ const BlogCard = ({
         {/* Actions */}
         <div className="flex items-center gap-4">
           <IconButton icon="heart" label="10.3k" />
-          <IconButton icon="message" label="2.2k" />
+          <IconButton
+            icon="message"
+            onClick={() => router.push(`/blog/${slug}#comments`)}
+            label={commentsCount.toString()}
+          />
         </div>
       </div>
 

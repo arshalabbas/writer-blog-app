@@ -19,6 +19,7 @@ const HomeBlogs = async () => {
           image={blog.image || ""}
           author={blog.author}
           userId={session?.user.id || ""}
+          commentsCount={blog.commentsCount}
         />
       ))}
       <div className="my-10" />

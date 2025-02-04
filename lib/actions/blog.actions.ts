@@ -93,6 +93,10 @@ export const updateBlogById = async (id: string, data: BlogSchema) => {
   redirect("/");
 };
 
+const getCommentsCountByBlogId = (blogId: string) => {
+  return prisma.comment.count({ where: { blogId } });
+};
+
 export const getAllBlogs = async () => {
   // const session = await auth();
   // console.log(userId);
@@ -102,7 +106,15 @@ export const getAllBlogs = async () => {
     orderBy: { createdAt: "desc" },
   });
 
-  return blogs;
+  const blogsExtended = await Promise.all(
+    blogs.map(async (blog) => {
+      const commentsCount = await getCommentsCountByBlogId(blog.id);
+
+      return { ...blog, commentsCount };
+    }),
+  );
+
+  return blogsExtended;
 };
 
 export const getBlogsByUsername = async (username: string) => {
@@ -112,7 +124,15 @@ export const getBlogsByUsername = async (username: string) => {
     orderBy: { createdAt: "desc" },
   });
 
-  return blogs;
+  const blogsExtended = await Promise.all(
+    blogs.map(async (blog) => {
+      const commentsCount = await getCommentsCountByBlogId(blog.id);
+
+      return { ...blog, commentsCount };
+    }),
+  );
+
+  return blogsExtended;
 };
 
 export const getBlogBySlug = async (slug: string) => {
@@ -138,7 +158,9 @@ export const getBlogBySlug = async (slug: string) => {
     },
   });
 
-  return blog;
+  if (!blog) return null;
+
+  return { ...blog, commentsCount: await getCommentsCountByBlogId(blog.id) };
 };
 
 export const getBlogById = async (id: string) => {
