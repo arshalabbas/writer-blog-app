@@ -1,8 +1,5 @@
-import Image from "next/image";
-import React from "react";
-import { Input } from "../ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Button } from "../ui/button";
+import { auth } from "@/lib/auth";
+import { fallbackAvatar } from "@/lib/utils";
 import {
   Bell,
   LogOut,
@@ -12,15 +9,17 @@ import {
   User,
   UserPlus,
 } from "lucide-react";
-import { auth } from "@/lib/auth";
+import Image from "next/image";
 import Link from "next/link";
-import { fallbackAvatar } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import SearchInput from "./search-input";
 
 const Navbar = async () => {
   const session = await auth();
@@ -38,10 +37,7 @@ const Navbar = async () => {
           />
         </Link>
         <div className="hidden sm:flex">
-          <Input
-            className="hidden w-[350px] md:block"
-            placeholder="Search writes..."
-          />
+          <SearchInput className="hidden w-[350px] md:block" />
           <Button className="flex md:hidden" size={"icon"} variant={"outline"}>
             <Search />
           </Button>

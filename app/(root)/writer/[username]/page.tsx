@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { getUserByUsername } from "@/lib/actions/user.actions";
 import { auth } from "@/lib/auth";
 import { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
 
 interface Props {
@@ -16,8 +16,6 @@ const ProfilePage = async ({ params }: Props) => {
   const { username } = await params;
   const user = await getUserByUsername(username);
   const session = await auth();
-
-  if (!session && !user) redirect("/login");
 
   if (!user) return notFound();
 

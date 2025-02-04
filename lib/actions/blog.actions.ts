@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { generateSlug } from "../utils";
 import { revalidatePath } from "next/cache";
 import { edgeStoreClient } from "../edgestore/edgestore.config";
+import { Prisma } from "@prisma/client";
 
 export const createBlog = async (data: unknown) => {
   const session = await auth();
@@ -97,11 +98,32 @@ const getCommentsCountByBlogId = (blogId: string) => {
   return prisma.comment.count({ where: { blogId } });
 };
 
-export const getAllBlogs = async () => {
-  // const session = await auth();
-  // console.log(userId);
+export const getAllBlogs = async (search?: string) => {
+  const whereClause: Prisma.BlogWhereInput = {};
+
+  if (search) {
+    whereClause.OR = [
+      { title: { contains: search, mode: "insensitive" } },
+      {
+        description: { contains: search, mode: "insensitive" },
+      },
+      {
+        author: { username: { contains: search, mode: "insensitive" } },
+      },
+      {
+        sections: {
+          some: { title: { contains: search, mode: "insensitive" } },
+        },
+      },
+      {
+        sections: {
+          some: { content: { contains: search, mode: "insensitive" } },
+        },
+      },
+    ];
+  }
   const blogs = await prisma.blog.findMany({
-    // where: { author: { id: { not: session?.user?.id } } },
+    where: whereClause,
     include: { author: { select: { id: true, username: true, image: true } } },
     orderBy: { createdAt: "desc" },
   });
